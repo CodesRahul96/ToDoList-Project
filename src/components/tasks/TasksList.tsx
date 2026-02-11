@@ -659,10 +659,11 @@ export const TasksList: React.FC = () => {
               </DragOverlay>
             </DndContext>
           ) : (
-            orderedTasks.map((task) => (
+            orderedTasks.map((task, index) => (
               <TaskItem
                 key={task.id}
                 task={task}
+                index={index}
                 features={{
                   enableLinks: true,
                   enableGlow: user.settings.enableGlow,
@@ -688,29 +689,29 @@ export const TasksList: React.FC = () => {
               />
             ))
           )
+        ) : search && orderedTasks.length === 0 && user.tasks.length > 0 ? (
+          <TaskNotFound>
+            <Box sx={{ opacity: 0.2 }}>
+              <TaskIcon scale={0.4} />
+            </Box>
+            <span>No tasks found</span>
+            <p>Try searching for something else or check your filters.</p>
+          </TaskNotFound>
         ) : (
           <NoTasks>
-            <span>You don't have any tasks yet</span>
-            <br />
-            Click on the <span>+</span> button to add one
+            <Box sx={{ opacity: 0.1 }}>
+              <TaskIcon scale={0.6} />
+            </Box>
+            <span>No tasks yet</span>
+            <p>Ready to start your day? Add your first task!</p>
           </NoTasks>
         )}
-        {search && orderedTasks.length === 0 && user.tasks.length > 0 ? (
-          <TaskNotFound>
-            <b>No tasks found</b>
-            <br />
-            Try searching with different keywords.
-            <div style={{ marginTop: "14px" }}>
-              <TaskIcon scale={0.8} />
-            </div>
-          </TaskNotFound>
-        ) : null}
-        <EditTask
-          open={editModalOpen}
-          task={user.tasks.find((task) => task.id === selectedTaskId)}
-          onClose={() => setEditModalOpen(false)}
-        />
       </TasksContainer>
+      <EditTask
+        open={editModalOpen}
+        task={user.tasks.find((task) => task.id === selectedTaskId)}
+        onClose={() => setEditModalOpen(false)}
+      />
       <Dialog open={deleteDialogOpen} onClose={cancelDeleteTask}>
         <CustomDialogTitle
           title="Delete Task"

@@ -2,6 +2,7 @@ import type { PaletteMode, Theme } from "@mui/material";
 import { createTheme } from "@mui/material";
 import { muiComponentsProps } from "./muiComponents";
 import { ColorPalette, themeConfig } from "./themeConfig";
+import { getFontColor } from "../utils";
 
 /**
  * Creates a custom MUI theme based on provided primary color, background color, and palette mode.
@@ -71,8 +72,11 @@ export const createCustomTheme = (
       //   paper: mode === "dark" ? ColorPalette.charcoal : ColorPalette.lightMode,
       // },
       text: {
-        primary: mode === "dark" ? "#ffffff" : "#1e293b",
-        secondary: mode === "dark" ? "#a1a1aa" : "#64748b",
+        primary: getFontColor(backgroundColor),
+        secondary:
+          getFontColor(backgroundColor) === ColorPalette.fontDark
+            ? "#475569" // slate-600 for light bg
+            : "#a1a1aa", // zinc-400 for dark bg
       },
       mode,
     },

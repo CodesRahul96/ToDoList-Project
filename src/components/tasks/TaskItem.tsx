@@ -32,6 +32,8 @@ import { CSS } from "@dnd-kit/utilities";
 
 interface TaskItemProps {
   task: Task;
+  index?: number;
+  onDelete?: () => void;
   features?: {
     enableLinks?: boolean;
     enableGlow?: boolean;
@@ -55,6 +57,7 @@ interface TaskItemProps {
 export const TaskItem = memo(
   ({
     task,
+    index,
     features = {},
     selection,
     onContextMenu,
@@ -99,6 +102,7 @@ export const TaskItem = memo(
 
     return (
       <TaskContainer
+        index={index}
         ref={(node) => {
           setNodeRef(node);
           itemRef.current = node;
@@ -165,7 +169,9 @@ export const TaskItem = memo(
             </Pinned>
           )}
           <TaskHeader>
-            <TaskName done={task.done} id={`task-name-${task.id}`}>{textHighlighter(task.name)}</TaskName>
+            <TaskName done={task.done} id={`task-name-${task.id}`}>
+              {textHighlighter(task.name)}
+            </TaskName>
             <Tooltip
               title={
                 moveMode && enableMoveMode

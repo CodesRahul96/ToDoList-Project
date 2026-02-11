@@ -17,3 +17,4 @@ export { TabPanel, TabGroupProvider } from "./TabPanel";
 export { TaskItem } from "./tasks/TaskItem";
 export { SidebarLayout } from "./SidebarLayout";
 export { SidebarContent } from "./SidebarContent";
+export { ModernBackground } from "./ModernBackground";

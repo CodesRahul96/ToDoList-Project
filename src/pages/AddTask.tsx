@@ -1,19 +1,30 @@
 import { Category, Task } from "../types/user";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AddTaskButton, Container, StyledInput } from "../styles";
-import { AddTaskRounded, CancelRounded } from "@mui/icons-material";
-import { IconButton, InputAdornment, Tooltip } from "@mui/material";
+import { AddTaskButton, GlassCard, StyledInput } from "../styles";
+import { AddTaskRounded } from "@mui/icons-material";
 import { DESCRIPTION_MAX_LENGTH, TASK_NAME_MAX_LENGTH } from "../constants";
 import { ColorPicker, TopBar, CustomEmojiPicker } from "../components";
 import { UserContext } from "../contexts/UserContext";
 import { useStorageState } from "../hooks/useStorageState";
 import { useTheme } from "@emotion/react";
-import { generateUUID, getFontColor, isDark, showToast } from "../utils";
-import { ColorPalette } from "../theme/themeConfig";
+import { generateUUID, showToast } from "../utils";
 import InputThemeProvider from "../contexts/InputThemeProvider";
 import { CategorySelect } from "../components/CategorySelect";
 import { useToasterStore } from "react-hot-toast";
+import styled from "@emotion/styled";
+
+const AddTaskContainer = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  width: 100%;
+  animation: fadeIn 0.5s ease-out;
+
+  @media (max-width: 600px) {
+    padding: 24px 12px;
+  }
+`;
 
 const AddTask = () => {
   const { user, setUser } = useContext(UserContext);
@@ -135,112 +146,102 @@ const AddTask = () => {
 
   return (
     <>
-      <TopBar title="Add New Task" />
-      <Container>
-        <CustomEmojiPicker
-          emoji={emoji}
-          onEmojiChange={setEmoji}
-          name={name}
-          type="task"
-          color={color}
-        />
-        {/* fix for input colors */}
-        <InputThemeProvider>
-          <StyledInput
-            label="Task Name"
-            name="name"
-            placeholder="Enter task name"
-            autoComplete="off"
-            value={name}
-            onChange={handleNameChange}
-            required
-            error={nameError !== ""}
-            helpercolor={nameError && ColorPalette.red}
-            helperText={
-              name === ""
-                ? undefined
-                : !nameError
-                  ? `${name.length}/${TASK_NAME_MAX_LENGTH}`
-                  : nameError
-            }
+      <TopBar title="New Task" />
+      <AddTaskContainer>
+        <GlassCard sx={{ gap: { xs: 2, sm: 3 }, p: { xs: 2.5, sm: 4 } }}>
+          <CustomEmojiPicker
+            emoji={emoji}
+            onEmojiChange={setEmoji}
+            name={name}
+            type="task"
+            color={color}
           />
-          <StyledInput
-            label="Task Description"
-            name="name"
-            placeholder="Enter task description"
-            autoComplete="off"
-            value={description}
-            onChange={handleDescriptionChange}
-            multiline
-            rows={4}
-            error={descriptionError !== ""}
-            helpercolor={descriptionError && ColorPalette.red}
-            helperText={
-              description === ""
-                ? undefined
-                : !descriptionError
-                  ? `${description.length}/${DESCRIPTION_MAX_LENGTH}`
-                  : descriptionError
-            }
-          />
-          <StyledInput
-            label="Task Deadline"
-            name="name"
-            placeholder="Enter deadline date"
-            type="datetime-local"
-            value={deadline}
-            onChange={handleDeadlineChange}
-            onFocus={() => setIsDeadlineFocused(true)}
-            onBlur={() => setIsDeadlineFocused(false)}
-            hidetext={(!deadline || deadline === "") && !isDeadlineFocused} // fix for label overlapping with input
-            sx={{
-              colorScheme: isDark(theme.secondary) ? "dark" : "light",
-            }}
-            slotProps={{
-              input: {
-                startAdornment:
-                  deadline && deadline !== "" ? (
-                    <InputAdornment position="start">
-                      <Tooltip title="Clear">
-                        <IconButton color="error" onClick={() => setDeadline("")}>
-                          <CancelRounded />
-                        </IconButton>
-                      </Tooltip>
-                    </InputAdornment>
-                  ) : undefined,
-              },
-            }}
-          />
+          <InputThemeProvider>
+            <StyledInput
+              label="Task Name"
+              placeholder="What needs to be done?"
+              value={name}
+              onChange={handleNameChange}
+              required
+              error={nameError !== ""}
+              helperText={nameError || `${name.length}/${TASK_NAME_MAX_LENGTH}`}
+              fullWidth
+            />
+            <StyledInput
+              label="Description"
+              placeholder="Add some details..."
+              value={description}
+              onChange={handleDescriptionChange}
+              multiline
+              rows={4}
+              error={descriptionError !== ""}
+              helperText={descriptionError || `${description.length}/${DESCRIPTION_MAX_LENGTH}`}
+              fullWidth
+            />
+            <StyledInput
+              label="Deadline"
+              type="datetime-local"
+              value={deadline}
+              onChange={handleDeadlineChange}
+              onFocus={() => setIsDeadlineFocused(true)}
+              onBlur={() => setIsDeadlineFocused(false)}
+              hidetext={(!deadline || deadline === "") && !isDeadlineFocused}
+              sx={{ colorScheme: theme.darkmode ? "dark" : "light" }}
+              fullWidth
+            />
 
-          {user.settings.enableCategories !== undefined && user.settings.enableCategories && (
-            <div style={{ marginBottom: "14px" }}>
-              <br />
+            {user.settings.enableCategories && (
               <CategorySelect
                 selectedCategories={selectedCategories}
-                onCategoryChange={(categories) => setSelectedCategories(categories)}
-                width="400px"
-                fontColor={getFontColor(theme.secondary)}
+                onCategoryChange={setSelectedCategories}
+                width="100%"
+                fontColor={theme.text.primary}
               />
-            </div>
-          )}
-        </InputThemeProvider>
-        <ColorPicker
-          color={color}
-          width="400px"
-          onColorChange={(color) => {
-            setColor(color);
-          }}
-          fontColor={getFontColor(theme.secondary)}
-        />
-        <AddTaskButton
-          onClick={handleAddTask}
-          disabled={
-            name.length > TASK_NAME_MAX_LENGTH || description.length > DESCRIPTION_MAX_LENGTH
-          }
-        >
-          Create Task
-        </AddTaskButton>
-      </Container>
+            )}
+          </InputThemeProvider>
+
+          <ColorPicker
+            color={color}
+            width="100%"
+            onColorChange={setColor}
+            fontColor={theme.text.primary}
+          />
+
+          <AddTaskButton
+            onClick={handleAddTask}
+            disabled={
+              name.length > TASK_NAME_MAX_LENGTH ||
+              description.length > DESCRIPTION_MAX_LENGTH ||
+              !name
+            }
+            sx={{
+              mt: 2,
+              py: { xs: 1.8, sm: 2 },
+              borderRadius: "18px",
+              fontSize: "16px",
+              fontWeight: 800,
+              textTransform: "none",
+              background: `linear-gradient(135deg, ${color}, ${color}dd)`,
+              boxShadow: `0 8px 25px -6px ${color}60`,
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              "&:hover": {
+                transform: "translateY(-2px)",
+                boxShadow: `0 12px 30px -6px ${color}80`,
+                background: `linear-gradient(135deg, ${color}, ${color})`,
+              },
+              "&:active": {
+                transform: "translateY(0)",
+              },
+              "&.Mui-disabled": {
+                opacity: 0.5,
+                background: theme.darkmode ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
+              }
+            }}
+          >
+            Create Task
+          </AddTaskButton>
+        </GlassCard>
+      </AddTaskContainer>
     </>
   );
 };

@@ -1,22 +1,28 @@
 import styled from "@emotion/styled";
 import { fadeIn, progressPulse, pulseAnimation, scale } from "./keyframes.styled";
 import { Box, Button, CircularProgress, css, IconButton } from "@mui/material";
-import { getFontColor, isDark } from "../utils";
+import { getFontColor } from "../utils";
 import { reduceMotion } from ".";
 
 export const GreetingHeader = styled.div`
   display: flex;
-  margin-top: 12px;
-  font-size: 26px;
-  font-weight: bold;
   margin-top: 16px;
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
   margin-left: 8px;
+  color: ${({ theme }) => theme.text.primary};
 
-  @media (max-width: 550px) {
-    font-size: 22px;
+  @media (max-width: 1024px) {
+    font-size: 28px;
+    margin-top: 8px;
   }
-  @media print {
-    display: none;
+
+  @media (max-width: 600px) {
+    font-size: 24px;
+    margin-left: 0;
+    justify-content: center;
   }
 `;
 
@@ -24,30 +30,57 @@ export const TasksCountContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  @media print {
-    display: none;
+  margin: 32px 0;
+  
+  @media (max-width: 600px) {
+    margin: 20px 0;
   }
 `;
-//TODO: design this better for light themes
+
 export const TasksCount = styled("div", {
   shouldForwardProp: (prop) => prop !== "glow",
 })<{ glow: boolean }>`
   position: relative;
-  color: ${({ theme }) => getFontColor(theme.secondary)};
-  /* background: #090b2258; */
-  background: ${({ theme }) => (isDark(theme.secondary) ? "#090b2258" : "#ffffff3e")};
-  transition: 0.3s all;
+  color: ${({ theme }) => theme.text.primary};
+  background: ${({ theme }) =>
+    theme.darkmode ? "rgba(30, 41, 59, 0.45)" : "rgba(255, 255, 255, 0.5)"};
+  backdrop-filter: blur(20px) saturate(160%);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  justify-content: left;
-  gap: 8px 16px;
-  padding: 20px 24px;
-  margin: 24px 0 12px 0;
-  border-radius: 24px;
-  width: 650px;
-  border: 1px solid ${({ theme }) => (isDark(theme.secondary) ? "#44479cb7" : theme.primary)};
-  @media (min-width: 1024px) {
-    padding: 24px;
+  justify-content: flex-start;
+  gap: 28px;
+  padding: 32px 40px;
+  border-radius: 32px;
+  width: 100%;
+  max-width: 800px;
+  border: 1px solid ${({ theme }) => (theme.darkmode ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.6)")};
+  box-shadow: ${({ theme }) =>
+    theme.darkmode 
+      ? "0 20px 40px -12px rgba(0, 0, 0, 0.4)" 
+      : "0 15px 35px -12px rgba(0, 0, 0, 0.08)"};
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: ${({ theme }) =>
+      theme.darkmode 
+        ? "0 25px 50px -12px rgba(0, 0, 0, 0.5)" 
+        : "0 20px 45px -12px rgba(0, 0, 0, 0.12)"};
+  }
+
+  @media (max-width: 1024px) {
+    padding: 24px 32px;
+    gap: 20px;
+  }
+
+  @media (max-width: 600px) {
+    padding: 24px 20px;
+    border-radius: 24px;
+    gap: 16px;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    backdrop-filter: blur(12px);
   }
 `;
 
@@ -88,19 +121,20 @@ export const ProgressPercentageContainer = styled(Box, {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* background: #090b2287; */
-  background: ${({ theme }) => (isDark(theme.secondary) ? "#090b2287" : "#ffffff5c")};
+  background: ${({ theme }) =>
+    theme.darkmode ? "rgba(15, 23, 42, 0.8)" : "rgba(255, 255, 255, 0.8)"};
   border-radius: 100px;
-  margin: -5px;
-  border: 1px solid ${({ theme }) => (isDark(theme.secondary) ? "#44479cb7" : theme.primary)};
-  box-shadow: ${({ theme }) => `0 0 18px -2px ${isDark(theme.secondary) ? "#090b22" : "#bababa"}`};
+  margin: -4px;
+  border: 1px solid ${({ theme }) => theme.primary}40;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   & .MuiTypography-root {
-    color: ${({ theme }) => getFontColor(theme.secondary)};
+    color: ${({ theme }) => theme.text.primary};
+    font-weight: 700;
   }
   animation: ${({ theme, glow }) =>
     glow
       ? css`
-          ${progressPulse(theme.primary)} 4s infinite ease-in
+          ${progressPulse(theme.primary)} 3s infinite ease-in-out
         `
       : "none"};
 
@@ -125,23 +159,25 @@ export const AddButton = styled(Button, {
   align-items: center;
   justify-content: center;
   position: fixed;
-  bottom: 24px;
-  width: 72px;
-  height: 72px;
-  border-radius: 100%;
+  bottom: 32px;
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
   background-color: ${({ theme }) => theme.primary};
-  color: ${({ theme }) => getFontColor(theme.primary)};
+  color: #fff;
   right: 16vw;
-  box-shadow: ${({ glow, theme }) => (glow ? `0px 0px 32px -8px ${theme}` : "none")};
-  transition:
-    background-color 0.3s,
-    backdrop-filter 0.3s,
-    box-shadow 0.3s;
+  box-shadow: ${({ glow, theme }) =>
+    glow ? `0 10px 25px -5px ${theme.primary}80` : "0 4px 12px rgba(0,0,0,0.1)"};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
-    box-shadow: none;
+    transform: translateY(-4px) rotate(90deg);
     background-color: ${({ theme }) => theme.primary};
-    backdrop-filter: blur(6px);
+    box-shadow: ${({ theme }) => `0 15px 30px -5px ${theme.primary}a0`};
+  }
+
+  & svg {
+    font-size: 32px;
   }
 
   animation: ${scale} 0.5s;
@@ -155,6 +191,7 @@ export const AddButton = styled(Button, {
 
   @media (max-width: 1024px) {
     right: 24px;
+    bottom: 24px;
   }
 
   @media print {

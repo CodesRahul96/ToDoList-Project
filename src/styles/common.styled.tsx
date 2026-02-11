@@ -1,24 +1,25 @@
 import styled from "@emotion/styled";
-import { Avatar, AvatarProps, Button, css } from "@mui/material";
+import { Avatar, AvatarProps, Button, css, Paper } from "@mui/material";
 import { getFontColor } from "../utils";
 import { CSSProperties } from "react";
 import { pulseAnimation, scale } from "./keyframes.styled";
 import { reduceMotion } from "./reduceMotion.styled";
 
 export const DialogBtn = styled(Button)`
-  padding: 10px 24px;
-  border-radius: 12px;
+  padding: 12px 28px;
+  border-radius: 16px;
   font-size: 15px;
   font-weight: 600;
-  margin: 6px;
+  margin: 8px;
   text-transform: none;
-  transition: all 0.2s ease-in-out;
-  
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.01em;
+
   &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -4px ${({ theme }) => theme.primary}40;
   }
-  
+
   &:active {
     transform: translateY(0);
   }
@@ -72,20 +73,23 @@ const UnstyledAvatar = ({ ...props }: AvatarProps) => (
 );
 
 export const UserAvatar = styled(UnstyledAvatar, {
-  shouldForwardProp: (prop) => prop !== "hasimage",
+  shouldForwardProp: (prop) => prop !== "hasimage" && prop !== "pulse" && prop !== "size",
 })<UserAvatarProps>`
   color: #ffffff;
   background: ${({ hasimage, theme }) =>
-    hasimage ? "#ffffff1c" : theme.darkmode ? "#5e5e65" : "#8c919c"} !important;
-  transition: 0.3s background;
-  font-weight: 500;
+    hasimage ? "rgba(255, 255, 255, 0.12)" : theme.darkmode ? "#2d2d35" : "#e2e8f0"} !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
   width: ${({ size }) => size};
   height: ${({ size }) => size};
-  font-size: ${({ size }) => `calc(${size} / 2)`};
+  font-size: ${({ size }) => `calc(${size} / 2.2)`};
+  border: 2px solid ${({ theme }) => theme.primary}40;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   ${({ pulse, theme }) =>
     pulse &&
     css`
-      animation: ${pulseAnimation(theme.darkmode ? "#5e5e65" : "#8c919c", 10)} 1.2s infinite;
+      animation: ${pulseAnimation(theme.darkmode ? "#4a4a55" : "#cbd5e1", 12)} 1.5s ease-in-out
+        infinite;
     `}
 `;
 
@@ -97,7 +101,10 @@ interface ColorElementProps {
 }
 
 // Styled button for color selection
-export const ColorElement = styled.button<ColorElementProps>`
+export const ColorElement = styled("button", {
+  shouldForwardProp: (prop) =>
+    prop !== "clr" && prop !== "secondClr" && prop !== "size" && prop !== "disableHover",
+})<ColorElementProps>`
   background: ${({ clr, secondClr }) =>
     !clr
       ? "transparent"
@@ -176,5 +183,46 @@ export const ToastIconWrapper = styled.div<{ bgColor: string }>`
   ${({ theme }) => reduceMotion(theme)}
   & svg {
     font-size: 16px;
+  }
+`;
+
+export const GlassCard = styled(Paper)`
+  padding: 40px;
+  border-radius: 32px;
+  background: ${({ theme }) =>
+    theme.darkmode ? "rgba(30, 41, 59, 0.45)" : "rgba(255, 255, 255, 0.5)"} !important;
+  backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid ${({ theme }) => (theme.darkmode ? "rgba(255, 255, 255, 0.12)" : "rgba(255, 255, 255, 0.6)")};
+  box-shadow: ${({ theme }) =>
+    theme.darkmode
+      ? "0 25px 50px -12px rgba(0, 0, 0, 0.5)"
+      : "0 20px 40px -12px rgba(0, 0, 0, 0.08)"};
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+
+  &:hover {
+    box-shadow: ${({ theme }) =>
+      theme.darkmode
+        ? "0 30px 60px -12px rgba(0, 0, 0, 0.6)"
+        : "0 25px 50px -12px rgba(0, 0, 0, 0.12)"};
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 1024px) {
+    padding: 32px;
+    border-radius: 28px;
+    gap: 20px;
+  }
+
+  @media (max-width: 600px) {
+    padding: 24px 16px;
+    border-radius: 24px;
+    gap: 16px;
+    backdrop-filter: blur(16px);
   }
 `;

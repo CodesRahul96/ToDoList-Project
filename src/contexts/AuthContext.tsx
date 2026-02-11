@@ -43,9 +43,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      showToast(error.message, { type: "error" });
+      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+      showToast(errorMessage, { type: "error" });
     }
   };
 
@@ -53,18 +54,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const provider = new GithubAuthProvider();
       await signInWithPopup(auth, provider);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      showToast(error.message, { type: "error" });
+      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+      showToast(errorMessage, { type: "error" });
     }
   };
 
   const signUpWithEmail = async (email: string, pass: string) => {
     try {
       await createUserWithEmailAndPassword(auth, email, pass);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      showToast(error.message, { type: "error" });
+      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+      showToast(errorMessage, { type: "error" });
       throw error;
     }
   };
@@ -72,9 +75,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signInWithEmail = async (email: string, pass: string) => {
     try {
       await signInWithEmailAndPassword(auth, email, pass);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      showToast(error.message, { type: "error" });
+      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+      showToast(errorMessage, { type: "error" });
       throw error;
     }
   };

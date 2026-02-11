@@ -15,7 +15,7 @@ export const GlobalStyles = () => {
     <Global
       styles={css`
         * {
-          font-family: "Poppins", sans-serif !important;
+          font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
           -webkit-tap-highlight-color: transparent;
           box-sizing: border-box;
           &::selection {
@@ -24,8 +24,8 @@ export const GlobalStyles = () => {
           }
         }
         :root {
-          font-family: "Poppins", sans-serif;
-          line-height: 1.5;
+          font-family: "Inter", sans-serif;
+          line-height: 1.6;
           font-weight: 400;
           color-scheme: ${theme.darkmode ? "dark" : "light"};
           color: ${theme.text.primary};
@@ -34,8 +34,13 @@ export const GlobalStyles = () => {
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
           -webkit-text-size-adjust: 100%;
-          --rsbs-backdrop-bg: rgba(0, 0, 0, 0.3);
-          --rsbs-bg: ${theme.darkmode ? "#1e1e1e" : "#ffffff"};
+          --rsbs-backdrop-bg: rgba(0, 0, 0, 0.4);
+          --rsbs-bg: ${theme.darkmode ? "#1a1a1e" : "#ffffff"};
+        }
+        h1, h2, h3, h4, h5, h6 {
+          font-family: "Plus Jakarta Sans", sans-serif !important;
+          font-weight: 700;
+          letter-spacing: -0.02em;
         }
         .no-transition *,
         .no-transition *::before,

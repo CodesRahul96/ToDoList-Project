@@ -150,9 +150,10 @@ export const EditTask = ({ open, task, onClose }: EditTaskProps) => {
       slotProps={{
         paper: {
           style: {
-            borderRadius: "24px",
-            padding: "12px",
-            maxWidth: "600px",
+            borderRadius: "28px",
+            padding: "16px",
+            maxWidth: "800px",
+            width: "100%",
           },
         },
       }}

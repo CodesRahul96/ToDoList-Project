@@ -44,7 +44,7 @@ const Login = () => {
         await signInWithEmail(email, password);
         showToast("Welcome back!");
       }
-    } catch (error) {
+    } catch {
       // Error is handled in AuthContext
     } finally {
       setIsSubmitting(false);

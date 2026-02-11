@@ -120,19 +120,29 @@ export const SidebarLayout = ({ children }: SidebarLayoutProps) => {
 const LayoutContainer = styled.div`
   display: flex;
   min-height: 100vh;
+  position: relative;
 `;
 
 const SidebarContainer = styled(Paper)`
-  width: 300px;
+  width: 280px;
   flex-shrink: 0;
   border-radius: 0;
-  border-right: 1px solid ${({ theme }) => (theme.darkmode ? "#ffffff1f" : "#0000001f")};
-  background: ${({ theme }) => (theme.darkmode ? "#101418" : "#f7f9fc")};
+  border-right: 1px solid ${({ theme }) => (theme.darkmode ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.05)")};
+  background: ${({ theme }) =>
+    theme.darkmode ? "rgba(10, 14, 23, 0.5)" : "rgba(255, 255, 255, 0.45)"} !important;
+  backdrop-filter: blur(28px) saturate(160%);
   height: 100vh;
   position: sticky;
   top: 0;
   overflow-y: auto;
   padding: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  
+  @media (max-width: 1024px) {
+    width: 240px;
+  }
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -140,9 +150,17 @@ const SidebarContainer = styled(Paper)`
 
 const MainContent = styled.div<{ isMobile: boolean }>`
   flex-grow: 1;
-  padding: ${({ isMobile }) => isMobile ? "16px" : "24px 48px"};
+  padding: ${({ isMobile }) => (isMobile ? "16px 12px" : "32px 40px")};
   width: 100%;
-  max-width: 1200px;
+  max-width: ${({ isMobile }) => (isMobile ? "100%" : "1200px")};
   margin: 0 auto;
-  padding-bottom: 128px; /* For BottomNav or fab */
+  position: relative;
+  z-index: 10;
+  padding-bottom: 128px;
+  transition: all 0.3s ease;
+
+  @media (min-width: 1440px) {
+    max-width: 1300px;
+    padding: 40px 80px;
+  }
 `;

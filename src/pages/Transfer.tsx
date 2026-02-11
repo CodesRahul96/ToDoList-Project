@@ -394,10 +394,12 @@ const Transfer = () => {
               : undefined
           }
         >
-          <ManagementButton onClick={handleExport} disabled={selectedTasks.length === 0}>
-            <FileDownload /> &nbsp; Export Selected to JSON{" "}
-            {selectedTasks.length > 0 && `[${selectedTasks.length}]`}
-          </ManagementButton>
+          <span>
+            <ManagementButton onClick={handleExport} disabled={selectedTasks.length === 0}>
+              <FileDownload /> &nbsp; Export Selected to JSON{" "}
+              {selectedTasks.length > 0 && `[${selectedTasks.length}]`}
+            </ManagementButton>
+          </span>
         </Tooltip>
         <ManagementButton onClick={handleExportAll} disabled={user.tasks.length === 0}>
           <FileDownload /> &nbsp; Export All Tasks to JSON

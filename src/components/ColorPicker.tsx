@@ -325,7 +325,9 @@ interface StyledAccordionProps {
   fontColor: CSSProperties["color"];
 }
 
-const StyledAccordion = styled(Accordion)<StyledAccordionProps>`
+const StyledAccordion = styled(Accordion, {
+  shouldForwardProp: (prop) => prop !== "isExpanded" && prop !== "fontColor",
+})<StyledAccordionProps>`
   background: transparent;
   border-radius: 16px !important;
   // match border with other inputs

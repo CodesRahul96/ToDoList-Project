@@ -15,56 +15,52 @@ export const ColorPalette = {
 } as const satisfies Record<string, string>;
 
 export const themeConfig: { [key: string]: { primaryColor: string; secondaryColor?: string } } = {
-  "Dark Purple": {
-    primaryColor: ColorPalette.purple,
-    secondaryColor: "#0f0e13", // Slightly richer dark background
+  "Modern Blue": {
+    primaryColor: "#0961FB", // High-end executive blue
+    secondaryColor: "#F8FAFC", // Clean slate-50
   },
-  "Light Purple": {
-    primaryColor: ColorPalette.purple,
-    secondaryColor: "#f3f4f6", // Soft gray-white
+  "Midnight Slate": {
+    primaryColor: "#38bdf8", // Sky-400
+    secondaryColor: "#080E1E", // Deeper, more modern slate
   },
-  "Dark Blue": {
-    primaryColor: "#3b82f6", // Modern Blue
-    secondaryColor: "#0f172a", // Slate-900
+  "Emerald Grove": {
+    primaryColor: "#059669", // Pro Emerald
+    secondaryColor: "#F0FDF4", // Emerald-50
   },
-  "Light Blue": {
-    primaryColor: "#0ea5e9", // Sky-500
-    secondaryColor: "#f0f9ff", // Sky-50
+  "Deep Emerald": {
+    primaryColor: "#10B981", // Emerald-500
+    secondaryColor: "#021A15", // Deepest night emerald
   },
-  "Dark Pink": {
-    primaryColor: "#ec4899", // Pink-500
-    secondaryColor: "#1f1016",
+  "Royal Purple": {
+    primaryColor: "#7C3AED", // Modern Violet
+    secondaryColor: "#F5F3FF", // Violet-50
   },
-  "Light Pink": {
-    primaryColor: "#db2777", // Pink-600
-    secondaryColor: "#fdf2f8", // Pink-50
+  "Abyssal Violet": {
+    primaryColor: "#8B5CF6", // Violet-500
+    secondaryColor: "#0A0B1E", // Abyss night
   },
-  "Blush Blossom": {
-    primaryColor: "#f43f5e", // Rose-500
-    secondaryColor: "#fff1f2", // Rose-50
+  "Crimson Velvet": {
+    primaryColor: "#DC2626", // Professional Red
+    secondaryColor: "#FFF1F2", // Rose-50
   },
-  Cheesecake: {
-    primaryColor: "#e11d48", // Rose-600
-    secondaryColor: "#fffbe6", // Warm white
+  "Onyx Rose": {
+    primaryColor: "#FB7185", // Rose-400
+    secondaryColor: "#0F0A0B", // Dark velvet
   },
-  "Mystic Coral": {
-    primaryColor: "#f87171", // Red-400
-    secondaryColor: "#2a0a10",
+  "Sunset Glow": {
+    primaryColor: "#EA580C", // Vibrant Orange
+    secondaryColor: "#FFF7ED", // Orange-50
   },
-  "Dark Orange": {
-    primaryColor: "#f97316", // Orange-500
-    secondaryColor: "#0c0a09", // Stone-950
+  "Volcanic Ember": {
+    primaryColor: "#F97316", // Orange-500
+    secondaryColor: "#110E0D", // Volcanic dark
   },
-  "Light Orange": {
-    primaryColor: "#ea580c", // Orange-600
-    secondaryColor: "#fff7ed", // Orange-50
-  },
-  Aurora: {
-    primaryColor: "#10b981", // Emerald-500
-    secondaryColor: "#022c22", // Emerald-950
+  "Pure Minimalist": {
+    primaryColor: "#0F172A", // Slate-900 icon
+    secondaryColor: "#FFFFFF", // Pure white
   },
   "Pitch Black": {
-    primaryColor: "#ffffff",
-    secondaryColor: "#000000",
+    primaryColor: "#F1F5F9", // Slate-100 icon
+    secondaryColor: "#000000", // True black
   },
 };

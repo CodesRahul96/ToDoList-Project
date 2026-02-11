@@ -130,7 +130,9 @@ export const BottomNav = (): JSX.Element | null => {
   );
 };
 
-const AddIconContainer = styled(Box)<{ clr: string; animate: boolean }>`
+const AddIconContainer = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "animate" && prop !== "clr",
+})<{ clr: string; animate: boolean }>`
   border-radius: 100px;
   padding: 0;
   margin: 0 !important;
@@ -164,7 +166,9 @@ const Container = styled(Box)`
   z-index: 999;
 `;
 
-const StyledBottomNavigation = styled(BottomNavigation)<{ glow: boolean }>`
+const StyledBottomNavigation = styled(BottomNavigation, {
+  shouldForwardProp: (prop) => prop !== "glow",
+})<{ glow: boolean }>`
   /* border-radius: 24px 24px 0 0; */
   background: ${({ theme, glow }) => `${theme.palette.secondary.main}${glow ? "c8" : "e6"}`};
   backdrop-filter: blur(20px);

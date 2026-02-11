@@ -258,10 +258,10 @@ export const SettingsDialog = ({ open, onClose, handleOpen }: SettingsProps) => 
       slotProps={{
         paper: {
           style: {
-            padding: isMobile ? "12px 0" : "12px",
-            borderRadius: isMobile ? 0 : "24px",
-            minWidth: "400px",
-            maxHeight: isMobile ? undefined : "500px",
+            padding: isMobile ? "12px 0" : "16px",
+            borderRadius: isMobile ? 0 : "28px",
+            minWidth: isMobile ? "100%" : "450px",
+            maxHeight: isMobile ? undefined : "650px",
             overflow: "hidden",
           },
         },

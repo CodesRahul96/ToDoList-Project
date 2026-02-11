@@ -35,7 +35,12 @@ export const AddTaskButton = styled(Button)`
   }
 `;
 
-export const StyledInput = styled(TextField)<{ helpercolor?: string; hidetext?: boolean }>`
+export const StyledInput = styled(TextField, {
+  shouldForwardProp: (prop) => prop !== "helpercolor" && prop !== "hidetext",
+})<{
+  helpercolor?: string;
+  hidetext?: boolean;
+}>`
   margin: 12px;
   & .MuiOutlinedInput-root {
     border-radius: 16px;

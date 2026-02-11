@@ -116,7 +116,7 @@ export default function AppearanceTab() {
       >
         <StyledMenuItem value="system">
           <PersonalVideoRounded />
-          &nbsp; System ({systemTheme === "dark" ? Themes[0].name : Themes[1].name})
+          &nbsp; System ({systemTheme === "dark" ? Themes[1].name : Themes[0].name})
         </StyledMenuItem>
         {Themes.map((theme) => (
           <StyledMenuItem key={theme.name} value={theme.name}>
@@ -127,6 +127,7 @@ export default function AppearanceTab() {
               aria-label={`Change theme - ${theme.name}`}
               size="24px"
               disableHover
+              style={{ border: `1px solid ${theme.MuiTheme.palette.divider}` }}
             />
             &nbsp;
             {theme.name}

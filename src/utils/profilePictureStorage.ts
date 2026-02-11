@@ -24,6 +24,7 @@ export const initDB = (): Promise<void> => {
     };
 
     request.onsuccess = () => {
+      request.result.close();
       resolve();
     };
   });
@@ -53,10 +54,12 @@ export const getProfilePictureFromDB = async (
 
         getRequest.onsuccess = () => {
           resolve(getRequest.result || null);
+          db.close();
         };
 
         getRequest.onerror = () => {
           reject(new Error("Failed to fetch profile picture from IndexedDB"));
+          db.close();
         };
       };
 
@@ -83,10 +86,12 @@ export const saveProfilePictureInDB = async (base64Image: string): Promise<strin
       const putRequest = store.put(base64Image, PROFILE_PICTURE_KEY);
 
       putRequest.onsuccess = () => {
+        db.close();
         resolve("LOCAL_FILE_" + generateUUID()); // add uuid so image would update automatically
       };
 
       putRequest.onerror = () => {
+        db.close();
         reject(new Error("Failed to save profile picture"));
       };
     };

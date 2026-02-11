@@ -24,9 +24,7 @@ import styled from "@emotion/styled";
 import {
   UserAvatar,
   reduceMotion,
-  ring,
 } from "../styles";
-import { ColorPalette } from "../theme/themeConfig";
 import {
   getProfilePictureFromDB,
   shortRelativeTime,
@@ -35,7 +33,7 @@ import {
   timeAgo,
 } from "../utils";
 
-import { User } from "../types/user";
+import { Task, User } from "../types/user";
 
 interface SidebarContentProps {
   onClose?: () => void;
@@ -116,12 +114,12 @@ export const SidebarContent: React.FC<SidebarContentProps> = ({
       <MenuLink onClick={() => handleLinkClick("/")}>
         <StyledMenuItem selected={isActive("/", null)} aria-current={isActive("/", null) ? "page" : undefined}>
           <TaskAltRounded /> &nbsp; All Tasks
-          {tasks.filter((task: any) => !task.done).length > 0 && (
-            <Tooltip title={`${tasks.filter((task: any) => !task.done).length} tasks to do`}>
+          {tasks.filter((task: Task) => !task.done).length > 0 && (
+            <Tooltip title={`${tasks.filter((task: Task) => !task.done).length} tasks to do`}>
               <MenuLabel>
-                {tasks.filter((task: any) => !task.done).length > 99
+                {tasks.filter((task: Task) => !task.done).length > 99
                   ? "99+"
-                  : tasks.filter((task: any) => !task.done).length}
+                  : tasks.filter((task: Task) => !task.done).length}
               </MenuLabel>
             </Tooltip>
           )}
@@ -313,8 +311,12 @@ const Logo = styled.img`
 `;
 
 const LogoText = styled.h2`
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-size: 24px;
   & span {
-    color: #7764e8;
+    color: ${({ theme }) => theme.primary};
   }
 `;
 
@@ -326,98 +328,76 @@ const ProfileOptionsBottom = styled.div`
     : "16px"};
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 `;
 
 const CreditsContainer = styled.div`
-  font-size: 12px;
+  font-size: 11px;
   margin: 0;
-  opacity: 0.8;
+  opacity: 0.6;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  letter-spacing: 0.02em;
   & span {
     backdrop-filter: none !important;
   }
 `;
 
 const LogoutAnimation = keyframes`
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(0.9) translateX(-2px);
-    opacity: 0.7;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+  0% { transform: scale(1); }
+  50% { transform: scale(0.9) translateX(-2px); }
+  100% { transform: scale(1); }
 `;
 
 const InstallAppAnimation = keyframes`
-   0% {
-    transform: translateY(0);
-  }
-  30% {
-    transform: translateY(-5px);
-  }
-  50% {
-    transform: translateY(2px);
-  }
-  70% {
-    transform: translateY(-2px);
-  }
-  100% {
-    transform: translateY(0);
-  }
+   0% { transform: translateY(0); }
+  30% { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
 `;
 
 const StyledMenuItem = styled(MenuItem)`
-  padding: 16px 12px;
-  border-radius: 14px;
+  padding: 12px 16px;
+  margin: 4px 0;
+  border-radius: 12px;
   box-shadow: none;
   font-weight: 500;
-  gap: 6px;
+  gap: 12px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
   & svg,
   .bmc-icon {
+    font-size: 20px;
     transition: 0.4s transform;
+    opacity: 0.7;
   }
 
   &:focus-visible {
-    outline: 2px solid ${({ theme }) => (theme.darkmode ? "#fff" : "#000")};
-    background: none;
+    outline: 2px solid ${({ theme }) => theme.primary};
+    background: ${({ theme }) => theme.primary}15;
   }
 
   &:hover {
-    & svg.GitHubIcon {
-      transform: rotateY(${2 * Math.PI}rad);
+    background: ${({ theme }) => (theme.darkmode ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)")};
+    & svg {
+      opacity: 1;
     }
-    & svg.BugReportRoundedIcon {
-      transform: rotate(45deg) scale(1.1) translateY(-10%);
-    }
-
-    & svg.InstallDesktopRoundedIcon {
-      animation: ${InstallAppAnimation} 0.8s ease-in alternate;
-    }
-
     & svg.LogoutIcon {
       animation: ${LogoutAnimation} 0.5s ease-in alternate;
     }
-
-    & .bmc-icon {
-      animation: ${ring} 2.5s ease-in alternate;
+    & svg.InstallDesktopRoundedIcon {
+      animation: ${InstallAppAnimation} 0.8s ease-in alternate;
     }
   }
 
   &.Mui-selected {
-    background-color: ${({ theme }) => theme.primary}20 !important;
+    background: ${({ theme }) => theme.primary}15 !important;
     color: ${({ theme }) => theme.primary} !important;
-     & svg {
+    font-weight: 600;
+    & svg {
       color: ${({ theme }) => theme.primary} !important;
+      opacity: 1;
     }
   }
 
@@ -429,26 +409,27 @@ const StyledMenuItem = styled(MenuItem)`
 `;
 
 const SettingsMenuItem = styled(StyledMenuItem)`
-  background: ${({ theme }) => (theme.darkmode ? "#1f1f1f" : "#101727")};
-  color: ${ColorPalette.fontLight} !important;
+  background: ${({ theme }) => (theme.darkmode ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.05)")};
+  color: ${({ theme }) => theme.text.primary} !important;
   margin-top: 8px !important;
+  border: 1px solid ${({ theme }) => (theme.darkmode ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.08)")};
   &:hover {
-    background: ${({ theme }) => (theme.darkmode ? "#1f1f1fb2" : "#101727b2")};
+    background: ${({ theme }) => (theme.darkmode ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.08)")};
     & svg.SettingsRoundedIcon {
-      transform: rotate(180deg);
+      transform: rotate(90deg);
     }
-  }
-  &:focus-visible {
-    background: ${({ theme }) => (theme.darkmode ? "#1f1f1f" : "#101727")};
   }
 `;
 
 const ProfileMenuItem = styled(StyledMenuItem)`
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: ${({ theme }) => (theme.darkmode ? "#1f1f1f" : "#d7d7d7")};
+  gap: 14px;
+  padding: 12px;
+  background: ${({ theme }) => (theme.darkmode ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)")};
+  border: 1px solid ${({ theme }) => (theme.darkmode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)")};
+  backdrop-filter: blur(10px);
   &:hover {
-    background: ${({ theme }) => (theme.darkmode ? "#1f1f1fb2" : "#d7d7d7b2")};
+    background: ${({ theme }) => (theme.darkmode ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.05)")};
   }
 `;

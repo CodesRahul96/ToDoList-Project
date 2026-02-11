@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { CategoryBadge, TopBar } from "../components";
 import styled from "@emotion/styled";
-import { PathName } from "../styles";
+import { GlassCard, PathName } from "../styles";
 import NotFound from "./NotFound";
 import { Clear, Done } from "@mui/icons-material";
 import { Emoji } from "emoji-picker-react";
@@ -40,128 +40,136 @@ const TaskDetails = () => {
   return (
     <>
       <TopBar title="Task Details" />
-      <Container>
-        <TaskName>
-          Task: <span translate="no">{task.name}</span>
-        </TaskName>
-        <TaskTable>
-          <tbody>
-            <TableRow>
-              <TableHeader>Emoji:</TableHeader>
-              <TableData>
-                {task.emoji ? (
-                  <>
-                    <Emoji unified={task?.emoji || ""} size={32} emojiStyle={emojisStyle} /> (
-                    {task.emoji})
-                  </>
-                ) : (
-                  <i>none</i>
-                )}
-              </TableData>
-            </TableRow>
-            <TableRow>
-              <TableHeader>ID:</TableHeader>
-              <TableData>{task?.id}</TableData>
-            </TableRow>
-            <TableRow>
-              <TableHeader>Description:</TableHeader>
-              <TableData translate="no">{task?.description}</TableData>
-            </TableRow>
-            <TableRow>
-              <TableHeader>Color:</TableHeader>
-              <TableData>
-                <ColorSquare clr={task.color} />
-                {getColorName(task.color).name} ({task.color.toUpperCase()})
-              </TableData>
-            </TableRow>
-            <TableRow>
-              <TableHeader>Created:</TableHeader>
-              <TableData>{dateFormatter.format(new Date(task.date))}</TableData>
-            </TableRow>
-            {task?.lastSave && (
+      <DetailsWrapper>
+        <TaskDetailsCard glow={user.settings.enableGlow}>
+          <TaskName>
+            Task: <span translate="no">{task.name}</span>
+          </TaskName>
+          <TaskTable>
+            <tbody>
               <TableRow>
-                <TableHeader>Last edited:</TableHeader>
-                <TableData>{dateFormatter.format(new Date(task.lastSave))}</TableData>
-              </TableRow>
-            )}
-            {task?.deadline && (
-              <TableRow>
-                <TableHeader>Task deadline:</TableHeader>
-                <TableData>{dateFormatter.format(new Date(task.deadline))}</TableData>
-              </TableRow>
-            )}
-            <TableRow>
-              <TableHeader>Done:</TableHeader>
-              <TableData>
-                {task?.done ? <Done /> : <Clear />} {task?.done.toString()}
-              </TableData>
-            </TableRow>
-            <TableRow>
-              <TableHeader>Pinned:</TableHeader>
-              <TableData>
-                {task?.pinned ? <Done /> : <Clear />} {task?.pinned.toString()}
-              </TableData>
-            </TableRow>
-            {task?.sharedBy && (
-              <TableRow>
-                <TableHeader>Shared by: </TableHeader>
-                <TableData>{task.sharedBy}</TableData>
-              </TableRow>
-            )}
-            {task.category && task.category.length > 0 && (
-              <TableRow>
-                <TableHeader>Categories:</TableHeader>
+                <TableHeader>Emoji:</TableHeader>
                 <TableData>
-                  <CategoryContainer>
-                    {task?.category?.map((category) => (
-                      <CategoryBadge key={category.id} category={category} glow={false} />
-                    ))}
-                  </CategoryContainer>
+                  {task.emoji ? (
+                    <>
+                      <Emoji unified={task?.emoji || ""} size={32} emojiStyle={emojisStyle} /> (
+                      {task.emoji})
+                    </>
+                  ) : (
+                    <i>none</i>
+                  )}
                 </TableData>
               </TableRow>
-            )}
-          </tbody>
-        </TaskTable>
-      </Container>
+              <TableRow>
+                <TableHeader>ID:</TableHeader>
+                <TableData>{task?.id}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableHeader>Description:</TableHeader>
+                <TableData translate="no">{task?.description || <i>No description provided</i>}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableHeader>Color:</TableHeader>
+                <TableData>
+                  <ColorSquare clr={task.color} />
+                  {getColorName(task.color).name} ({task.color.toUpperCase()})
+                </TableData>
+              </TableRow>
+              <TableRow>
+                <TableHeader>Created:</TableHeader>
+                <TableData>{dateFormatter.format(new Date(task.date))}</TableData>
+              </TableRow>
+              {task?.lastSave && (
+                <TableRow>
+                  <TableHeader>Last edited:</TableHeader>
+                  <TableData>{dateFormatter.format(new Date(task.lastSave))}</TableData>
+                </TableRow>
+              )}
+              {task?.deadline && (
+                <TableRow>
+                  <TableHeader>Task deadline:</TableHeader>
+                  <TableData>{dateFormatter.format(new Date(task.deadline))}</TableData>
+                </TableRow>
+              )}
+              <TableRow>
+                <TableHeader>Done:</TableHeader>
+                <TableData>
+                  {task?.done ? <Done color="success" /> : <Clear color="error" />} {task?.done ? "Yes" : "No"}
+                </TableData>
+              </TableRow>
+              <TableRow>
+                <TableHeader>Pinned:</TableHeader>
+                <TableData>
+                  {task?.pinned ? <Done color="primary" /> : <Clear color="disabled" />} {task?.pinned ? "Yes" : "No"}
+                </TableData>
+              </TableRow>
+              {task?.sharedBy && (
+                <TableRow>
+                  <TableHeader>Shared by: </TableHeader>
+                  <TableData>{task.sharedBy}</TableData>
+                </TableRow>
+              )}
+              {task.category && task.category.length > 0 && (
+                <TableRow>
+                  <TableHeader>Categories:</TableHeader>
+                  <TableData>
+                    <CategoryContainer>
+                      {task?.category?.map((category) => (
+                        <CategoryBadge key={category.id} category={category} glow={false} />
+                      ))}
+                    </CategoryContainer>
+                  </TableData>
+                </TableRow>
+              )}
+            </tbody>
+          </TaskTable>
+        </TaskDetailsCard>
+      </DetailsWrapper>
     </>
   );
 };
 
 export default TaskDetails;
 
-const Container = styled.div`
+const DetailsWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  padding: 16px;
-  border-radius: 32px;
-  margin: 0 auto;
-  margin-top: 100px;
-  box-shadow: 0 0px 24px 2px rgba(0, 0, 0, 0.3);
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  min-height: calc(100vh - 100px);
+  width: 100%;
 
-  @media (min-width: 768px) {
-    padding: 24px;
-    width: 70%;
+  @media (max-width: 600px) {
+    padding: 24px 12px;
   }
 `;
 
-const TaskName = styled.h2`
-  margin: 8px;
-  text-align: center;
-  font-size: 1.5em;
+const TaskDetailsCard = styled(GlassCard)<{ glow: boolean }>`
+  max-width: 800px;
+  width: 100%;
+  box-shadow: ${({ glow, theme }) => (glow ? `0 0 72px -16px ${theme.primary}bf` : "none")};
+  border: 1px solid ${({ theme }) => theme.primary}30;
+`;
 
-  @media (min-width: 768px) {
-    font-size: 1.8em;
+const TaskName = styled.h2`
+  margin: 0 0 24px 0;
+  text-align: center;
+  font-size: 1.8em;
+  font-weight: 800;
+  color: ${({ theme }) => theme.text.primary};
+
+  @media (max-width: 600px) {
+    font-size: 1.5em;
   }
 `;
 
 const TaskTable = styled.table`
   width: 100%;
   border-collapse: collapse;
-  margin-top: 16px;
 `;
 
 const TableRow = styled.tr`
-  border-bottom: 2px solid ${({ theme }) => theme.primary}41;
+  border-bottom: 1px solid ${({ theme }) => (theme.darkmode ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)")};
 
   &:last-child {
     border-bottom: none;
@@ -170,37 +178,46 @@ const TableRow = styled.tr`
 
 const TableHeader = styled.th`
   text-align: left;
-  padding: 8px;
-  font-size: 1em;
+  padding: 16px 8px;
+  font-size: 1.1em;
+  font-weight: 700;
+  color: ${({ theme }) => theme.text.primary};
+  width: 140px;
 
-  @media (min-width: 768px) {
-    font-size: 1.2em;
+  @media (max-width: 600px) {
+    font-size: 1em;
+    padding: 12px 4px;
+    width: 110px;
   }
 `;
 
 const TableData = styled.td`
   text-align: left;
-  padding: 8px;
+  padding: 16px 8px;
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 1em;
+  gap: 8px;
+  font-size: 1.05em;
   word-break: break-all;
-  @media (min-width: 768px) {
-    font-size: 1.1em;
+  color: ${({ theme }) => theme.text.primary};
+
+  @media (max-width: 600px) {
+    font-size: 0.95em;
+    padding: 12px 4px;
   }
 `;
 
 const ColorSquare = styled.div<{ clr: string }>`
-  width: 20px;
-  height: 20px;
-  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
   background-color: ${({ clr }) => clr};
+  border: 1px solid rgba(255, 255, 255, 0.2);
 `;
 
 const CategoryContainer = styled.div`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
 `;

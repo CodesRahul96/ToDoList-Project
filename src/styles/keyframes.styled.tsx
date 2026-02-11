@@ -111,3 +111,13 @@ export const ring = keyframes`
   43% { -webkit-transform: rotateZ(0); }
   100% { -webkit-transform: rotateZ(0); }
 `;
+export const scaleIn = keyframes`
+  from {
+    opacity:0;
+    transform: scale(0.9) translateY(10px);
+  }
+  to {
+    opacity:1;
+    transform: scale(1) translateY(0);
+  }
+`;
