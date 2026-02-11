@@ -20,7 +20,6 @@ import {
   CloudDoneRounded,
   CloudOffRounded,
   Delete,
-  GitHub,
   Google,
   LinkRounded,
   Logout,
@@ -49,7 +48,7 @@ import { ColorPalette } from "../theme/themeConfig";
 
 const UserProfile = () => {
   const { user, setUser } = useContext(UserContext);
-  const { user: firebaseUser, signInWithGoogle, signInWithGithub } = useAuth();
+  const { user: firebaseUser, signInWithGoogle } = useAuth();
   const { name, profilePicture, createdAt } = user;
   const [userName, setUserName] = useState<string>("");
   const [profilePictureURL, setProfilePictureURL] = useState<string>("");
@@ -328,8 +327,6 @@ const UserProfile = () => {
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   {firebaseUser.providerData[0]?.providerId === "google.com" ? (
                     <Google color="primary" />
-                  ) : firebaseUser.providerData[0]?.providerId === "github.com" ? (
-                    <GitHub />
                   ) : (
                     <TodayRounded />
                   )}
@@ -356,22 +353,6 @@ const UserProfile = () => {
                     sx={{ borderRadius: "14px", textTransform: "none", fontWeight: 600, py: 1.2 }}
                   >
                     Sign in with Google
-                  </Button>
-                  <Button
-                    variant="contained"
-                    fullWidth
-                    onClick={() => signInWithGithub()}
-                    startIcon={<GitHub />}
-                    sx={{
-                      borderRadius: "14px",
-                      textTransform: "none",
-                      fontWeight: 600,
-                      py: 1.2,
-                      bgcolor: "#24292e",
-                      "&:hover": { bgcolor: "#2f363d" },
-                    }}
-                  >
-                    Sign in with GitHub
                   </Button>
                 </ButtonGroup>
                 <SyncStatus authenticated={false}>

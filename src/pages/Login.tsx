@@ -1,7 +1,7 @@
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Google, GitHub, Visibility, VisibilityOff, Email } from "@mui/icons-material";
+import { Google, Visibility, VisibilityOff, Email } from "@mui/icons-material";
 import { 
   Button, 
   TextField, 
@@ -13,7 +13,7 @@ import {
 import { showToast } from "../utils";
 
 const Login = () => {
-  const { signInWithGoogle, signInWithGithub, signInWithEmail, signUpWithEmail, user, loading } = useAuth();
+  const { signInWithGoogle, signInWithEmail, signUpWithEmail, user, loading } = useAuth();
   const navigate = useNavigate();
   
   const [isSignUp, setIsSignUp] = useState(false);
@@ -142,13 +142,6 @@ const Login = () => {
             Continue with Google
             </button>
             
-            <button
-            onClick={() => signInWithGithub()}
-            className="flex w-full items-center justify-center gap-3 rounded-xl bg-[#24292e] px-6 py-3 font-semibold text-white transition-transform hover:bg-[#2f363d] active:scale-95"
-            >
-            <GitHub className="text-xl" />
-            Continue with GitHub
-            </button>
         </div>
 
         <p className="mt-8 text-sm text-gray-500 dark:text-gray-400">

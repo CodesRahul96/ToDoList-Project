@@ -2,7 +2,6 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import {
   User,
   GoogleAuthProvider,
-  GithubAuthProvider,
   signInWithPopup,
   signOut,
   onAuthStateChanged,
@@ -16,7 +15,6 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
-  signInWithGithub: () => Promise<void>;
   signUpWithEmail: (email: string, pass: string) => Promise<void>;
   signInWithEmail: (email: string, pass: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -42,17 +40,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signInWithGoogle = async () => {
     try {
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-    } catch (error: unknown) {
-      console.error(error);
-      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-      showToast(errorMessage, { type: "error" });
-    }
-  };
-
-  const signInWithGithub = async () => {
-    try {
-      const provider = new GithubAuthProvider();
       await signInWithPopup(auth, provider);
     } catch (error: unknown) {
       console.error(error);
@@ -93,7 +80,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         user,
         loading,
         signInWithGoogle,
-        signInWithGithub,
         signUpWithEmail,
         signInWithEmail,
         logout,

@@ -28,7 +28,7 @@
 
 ### 🔐 Modern Authentication
 
-- Support for **Google** and **GitHub** Sign-In.
+- Support for **Google** Sign-In.
 - Secure Email/Password authentication.
 - Automatic profile synchronization (Name & Profile Picture) from auth providers.
 
