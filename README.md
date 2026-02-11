@@ -110,10 +110,10 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
 ## 📷 Screenshots
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/maciekt07/TodoApp/main/screenshots/mobile_todolist.png" width="250px" />
-  <img src="https://raw.githubusercontent.com/maciekt07/TodoApp/main/screenshots/mobile_todolist2.png" width="250px" />
-  <img src="https://raw.githubusercontent.com/maciekt07/TodoApp/main/screenshots/desktop_todolist.png" width="500px" />
-  <img src="https://raw.githubusercontent.com/maciekt07/TodoApp/main/screenshots/desktop_todolist2.png" width="500px" />
+  <img src="https://github.com/CodesRahul96/ToDoList-Project/blob/main/screenshots/mobile_todolist.png" width="250px" />
+  <img src="https://github.com/CodesRahul96/ToDoList-Project/blob/main/screenshots/mobile_todolist1.png" width="250px" />
+  <img src="https://github.com/CodesRahul96/ToDoList-Project/blob/main/screenshots/desktop_todolist.png" width="500px" />
+  <img src="https://github.com/CodesRahul96/ToDoList-Project/blob/main/screenshots/desktop_todolist2.png" width="500px" />
 </p>
 
 ---
