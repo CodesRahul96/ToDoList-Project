@@ -12,30 +12,11 @@ import { CircularProgress } from "@mui/material";
 import toast from "react-hot-toast";
 import { TaskProvider } from "./contexts/TaskProvider.tsx";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
+import { FirebaseDebugger } from "./components/FirebaseDebugger.tsx";
 
 // initialize ntc colors
 initColors(ORIGINAL_COLORS);
 
-const offlinePreparationCount = parseInt(
-  // prevent toast from showing infinitely on older versions of the app
-  localStorage.getItem("offlinePreparationCount") || "0",
-  10,
-);
-
-if (
-  offlinePreparationCount < 3 &&
-  !localStorage.getItem("initialCachingComplete") &&
-  process.env.NODE_ENV !== "development"
-) {
-  showToast("Preparing app for offline use...", {
-    duration: Infinity,
-    type: "blank",
-    id: "initial-offline-preparation",
-    icon: <CircularProgress size={20} thickness={4} />,
-  });
-
-  localStorage.setItem("offlinePreparationCount", (offlinePreparationCount + 1).toString());
-}
 
 // Show a prompt to update the app when a new version is available
 registerSW({
@@ -64,6 +45,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <AuthProvider>
       <UserContextProvider>
         <TaskProvider>
+          <FirebaseDebugger />
           <App />
         </TaskProvider>
       </UserContextProvider>

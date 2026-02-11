@@ -17,6 +17,7 @@ const workbox: Partial<GenerateSWOptions> = {
   cleanupOutdatedCaches: true,
   globDirectory: "dist",
   globPatterns: ["**/*.{js,css,html,svg,png,webmanifest,webp}"],
+  globIgnores: ["**/splash-screens/**/*", "**/pwa/*.webp"],
   additionalManifestEntries: [...settingsEmojiPreviewAssets],
   // Use runtime caching for dynamic imports and external resources
   runtimeCaching: [
