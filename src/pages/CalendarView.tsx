@@ -296,7 +296,7 @@ const CalendarView = () => {
                 resizable
                 selectable
                 components={components}
-                onDropFromOutside={({ start, end, allDay }) => {
+                onDropFromOutside={({ start }) => {
                     const task = draggedTaskRef.current;
                     if (task) {
                         setUser((prevUser) => {
@@ -304,7 +304,7 @@ const CalendarView = () => {
                                 if (t.id === task.id) {
                                     return {
                                         ...t,
-                                        deadline: start,
+                                        deadline: new Date(start),
                                         // If dropped on "allDay" slot or Month view, maybe set specific time? 
                                         // keeping it simple for now.
                                     };

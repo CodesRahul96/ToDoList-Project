@@ -1,4 +1,4 @@
-import { Box, Typography, Button, Divider, useTheme } from "@mui/material";
+import { Box, Typography, Button, useTheme } from "@mui/material";
 import { AddRounded } from "@mui/icons-material";
 import { Task } from "../../types/user";
 import { DraggableTask } from "./DraggableTask";

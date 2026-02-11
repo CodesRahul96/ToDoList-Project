@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AddTaskButton, GlassCard, StyledInput } from "../styles";
 import { AddTaskRounded, AddRounded, CloseRounded } from "@mui/icons-material";
 import { DESCRIPTION_MAX_LENGTH, TASK_NAME_MAX_LENGTH } from "../constants";
-import { Box, Stack, Typography, IconButton, Button, Grid } from "@mui/material";
+import { Box, Stack, Typography, IconButton, Button } from "@mui/material";
 import { ColorPicker, TopBar, CustomEmojiPicker } from "../components";
 import { UserContext } from "../contexts/UserContext";
 import { useStorageState } from "../hooks/useStorageState";
