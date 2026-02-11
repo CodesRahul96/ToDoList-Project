@@ -49,7 +49,7 @@ export default defineConfig({
       },
       registerType: "prompt",
       workbox, // workbox.config.ts
-      includeAssets: ["**/*", "sw.js", "!splash-screens/**/*"],
+      includeAssets: ["**/*", "sw.js", "!splash-screens/**/*", "!_redirects"],
     }),
   ],
   resolve: {
