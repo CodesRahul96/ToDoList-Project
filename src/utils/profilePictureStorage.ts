@@ -103,24 +103,21 @@ export const deleteProfilePictureFromDB = async (): Promise<void> => {
     // delete the entire database
     const deleteRequest = indexedDB.deleteDatabase(DB_NAME);
 
-    deleteRequest.onsuccess = () => {
-      console.log("IndexedDB deleted successfully");
+     deleteRequest.onsuccess = () => {
+       // recreate the DB
+       const openRequest = indexedDB.open(DB_NAME, 1);
 
-      // recreate the DB
-      const openRequest = indexedDB.open(DB_NAME, 1);
+       openRequest.onupgradeneeded = (event) => {
+         const db = (event.target as IDBOpenDBRequest).result;
+         if (!db.objectStoreNames.contains(STORE_NAME)) {
+           db.createObjectStore(STORE_NAME);
+         }
+       };
 
-      openRequest.onupgradeneeded = (event) => {
-        const db = (event.target as IDBOpenDBRequest).result;
-        if (!db.objectStoreNames.contains(STORE_NAME)) {
-          db.createObjectStore(STORE_NAME);
-        }
-      };
-
-      openRequest.onsuccess = () => {
-        openRequest.result.close(); // close the connection immediately
-        console.log("IndexedDB recreated empty");
-        resolve();
-      };
+       openRequest.onsuccess = () => {
+         openRequest.result.close(); // close the connection immediately
+         resolve();
+       };
 
       openRequest.onerror = () => {
         console.error("Failed to recreate IndexedDB");

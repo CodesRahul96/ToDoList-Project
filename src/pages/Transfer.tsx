@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import { TopBar } from "../components";
-import { Category, Task, UUID } from "../types/user";
+import { Task, UUID } from "../types/user";
 import Typography from "@mui/material/Typography";
 import { Emoji } from "emoji-picker-react";
 import {
@@ -13,13 +13,9 @@ import {
   PhonelinkRounded,
   QrCodeScannerRounded,
 } from "@mui/icons-material";
-import { exportTasksToJson, isHexColor, showToast, systemInfo } from "../utils";
+import { exportTasksToJson, hasInvalidColors, isTaskValid, showToast, systemInfo } from "../utils";
 import { Tooltip } from "@mui/material";
-import {
-  CATEGORY_NAME_MAX_LENGTH,
-  DESCRIPTION_MAX_LENGTH,
-  TASK_NAME_MAX_LENGTH,
-} from "../constants";
+
 import { UserContext } from "../contexts/UserContext";
 import { useStorageState } from "../hooks/useStorageState";
 import {
@@ -125,20 +121,8 @@ const Transfer = () => {
               return;
             }
 
-            /**
-             * TODO: write separate util function to check if task is not invalid
-             */
-
             // Check if any imported task property exceeds the maximum length
-            const invalidTasks = importedTasks.filter((task) => {
-              const isInvalid =
-                (task.name && task.name.length > TASK_NAME_MAX_LENGTH) ||
-                (task.description && task.description.length > DESCRIPTION_MAX_LENGTH) ||
-                (task.category &&
-                  task.category.some((cat) => cat.name.length > CATEGORY_NAME_MAX_LENGTH));
-
-              return isInvalid;
-            });
+            const invalidTasks = importedTasks.filter((task) => !isTaskValid(task));
 
             if (invalidTasks.length > 0) {
               const invalidTaskNames = invalidTasks.map((task) => task.name).join(", ");
@@ -152,22 +136,14 @@ const Transfer = () => {
               return;
             }
 
-            const isCategoryColorValid = (category: Category) =>
-              category.color && isHexColor(category.color);
-
-            const hasInvalidColors = importedTasks.some((task) => {
-              return (
-                (task.color && !isHexColor(task.color)) ||
-                (task.category && !task.category.every((cat) => isCategoryColorValid(cat)))
-              );
-            });
-
-            if (hasInvalidColors) {
+            if (hasInvalidColors(importedTasks)) {
               showToast("Imported file contains tasks with invalid color formats.", {
                 type: "error",
               });
               return;
             }
+
+
 
             const maxFileSize = 6 * 1024 * 1024; //MB
             if (file.size > maxFileSize) {
@@ -225,10 +201,9 @@ const Transfer = () => {
             setUser((prevUser) => ({ ...prevUser, tasks: uniqueTasks }));
 
             // Prepare the list of imported task names
-            const importedTaskNames = importedTasks.map((task) => task.name).join(", ");
+
 
             // Display the alert with the list of imported task names
-            console.log(`Imported Tasks: ${importedTaskNames}`);
 
             showToast(
               <div>
@@ -327,7 +302,6 @@ const Transfer = () => {
     setIsDragging(false);
 
     const file = e.dataTransfer.files[0];
-    console.log(file);
     if (file.size === 0 || file.type === "") {
       showToast(
         <div>

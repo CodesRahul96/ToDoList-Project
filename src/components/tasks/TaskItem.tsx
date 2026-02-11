@@ -144,7 +144,7 @@ export const TaskItem = memo(
         )}
 
         {(task.emoji || task.done) && (
-          <EmojiContainer clr={getFontColor(task.color)}>
+          <EmojiContainer clr={getFontColor(task.color)} role="img" aria-label={task.emoji ? "Task emoji" : "Task completed"}>
             {task.done ? (
               <DoneRounded fontSize="large" />
             ) : (
@@ -165,7 +165,7 @@ export const TaskItem = memo(
             </Pinned>
           )}
           <TaskHeader>
-            <TaskName done={task.done}>{textHighlighter(task.name)}</TaskName>
+            <TaskName done={task.done} id={`task-name-${task.id}`}>{textHighlighter(task.name)}</TaskName>
             <Tooltip
               title={
                 moveMode && enableMoveMode
@@ -180,7 +180,7 @@ export const TaskItem = memo(
             </Tooltip>
           </TaskHeader>
 
-          <TaskDescription done={task.done}>
+          <TaskDescription done={task.done} id={`task-desc-${task.id}`}>
             <RenderTaskDescription
               task={task}
               textHighlighter={textHighlighter}

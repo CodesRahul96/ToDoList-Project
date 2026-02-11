@@ -27,68 +27,77 @@ function App() {
   // Initialize user properties if they are undefined
   // this allows to add new properties to the user object without error
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const updateNestedProperties = (userObject: any, defaultObject: any): any => {
-      if (!userObject) return defaultObject;
-
-      Object.keys(defaultObject).forEach((key) => {
-        if (key === "categories") return;
-
-        if (
-          key === "colorList" &&
-          userObject.colorList &&
-          !defaultUser.colorList.every((element, index) => element === userObject.colorList[index])
-        ) {
-          return;
-        }
-
-        if (key === "favoriteCategories" && Array.isArray(userObject.favoriteCategories)) {
-          userObject.favoriteCategories = userObject.favoriteCategories.filter((id: UUID) =>
-            userObject.categories.some((cat: Category) => cat.id === id),
-          );
-          return;
-        }
-
-        if (key === "settings" && Array.isArray(userObject.settings)) {
-          delete userObject.settings;
-          showToast("Removed old settings array format.", {
-            duration: 6000,
-            icon: <DeleteForeverRounded />,
-            disableVibrate: true,
-          });
-        }
-
-        const userValue = userObject[key];
-        const defaultValue = defaultObject[key];
-
-        if (typeof defaultValue === "object" && defaultValue !== null) {
-          userObject[key] = updateNestedProperties(userValue, defaultValue);
-        } else if (userValue === undefined) {
-          userObject[key] = defaultValue;
-          showToast(
-            <div>
-              Added new property to user object{" "}
-              <i translate="no">
-                {key.toString()}: {userObject[key].toString()}
-              </i>
-            </div>,
-            {
-              duration: 6000,
-              icon: <DataObjectRounded />,
-              disableVibrate: true,
-            },
-          );
-        }
-      });
-
-      return userObject;
-    };
-
+    // Run only once on mount to update user structure if needed
+    // We use a ref to ensure it only runs once even in StrictMode if we wanted, 
+    // but the logic provides checks. 
+    // Ideally this should be a migration script, but for client-side app this works.
     setUser((prevUser) => {
+      const updateNestedProperties = (userObject: any, defaultObject: any): any => {
+        if (!userObject) return defaultObject;
+
+        Object.keys(defaultObject).forEach((key) => {
+          if (key === "categories") return;
+
+          if (
+            key === "colorList" &&
+            userObject.colorList &&
+            !defaultUser.colorList.every((element, index) => element === userObject.colorList[index])
+          ) {
+            return;
+          }
+
+          if (key === "favoriteCategories" && Array.isArray(userObject.favoriteCategories)) {
+            userObject.favoriteCategories = userObject.favoriteCategories.filter((id: UUID) =>
+              userObject.categories.some((cat: Category) => cat.id === id),
+            );
+            return;
+          }
+
+          if (key === "settings" && Array.isArray(userObject.settings)) {
+            delete userObject.settings;
+            showToast("Removed old settings array format.", {
+              duration: 6000,
+              icon: <DeleteForeverRounded />,
+              disableVibrate: true,
+            });
+          }
+
+          const userValue = userObject[key];
+          const defaultValue = defaultObject[key];
+
+          if (typeof defaultValue === "object" && defaultValue !== null) {
+            userObject[key] = updateNestedProperties(userValue, defaultValue);
+          } else if (userValue === undefined) {
+            userObject[key] = defaultValue;
+            showToast(
+              <div>
+                Added new property to user object{" "}
+                <i translate="no">
+                  {key.toString()}: {userObject[key].toString()}
+                </i>
+              </div>,
+              {
+                duration: 6000,
+                icon: <DataObjectRounded />,
+                disableVibrate: true,
+              },
+            );
+          }
+        });
+
+        return userObject;
+      };
+
       const updatedUser = updateNestedProperties({ ...prevUser }, defaultUser);
-      return prevUser !== updatedUser ? updatedUser : prevUser;
+      // Only return a new object if something actually changed (JSON stringify check is heavy but accurate here)
+      // or simplistic check. 
+      // Actually, updateNestedProperties mutates the copy. 
+      // If we want strict equality check, we'd need to deep compare.
+      // For now, we assume it's always returning the mutated copy.
+      return updatedUser;
     });
-  }, [setUser]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty dependency array to run only once
 
   useEffect(() => {
     const setBadge = async (count: number) => {

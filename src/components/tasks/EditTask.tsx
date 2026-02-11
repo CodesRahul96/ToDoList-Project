@@ -167,7 +167,7 @@ export const EditTask = ({ open, task, onClose }: EditTaskProps) => {
       <DialogContent>
         <CustomEmojiPicker
           emoji={editedTask?.emoji || undefined}
-          setEmoji={setEmoji}
+          onEmojiChange={setEmoji}
           color={editedTask?.color}
           name={editedTask?.name || ""}
           type="task"

@@ -329,7 +329,7 @@ const Categories = () => {
           <h2>Add New Category</h2>
           <CustomEmojiPicker
             emoji={typeof emoji === "string" ? emoji : undefined}
-            setEmoji={setEmoji}
+            onEmojiChange={setEmoji}
             color={color}
             name={name}
             type="category"
@@ -447,7 +447,7 @@ const Categories = () => {
               emoji={
                 user.categories.find((cat) => cat.id === selectedCategoryId)?.emoji || undefined
               }
-              setEmoji={setEditEmoji}
+              onEmojiChange={setEditEmoji}
               color={editColor}
               name={editName}
               type="category"

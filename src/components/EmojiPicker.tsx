@@ -45,14 +45,14 @@ import { CustomDialogTitle } from "./DialogTitle";
 import DisabledThemeProvider from "../contexts/DisabledThemeProvider";
 
 interface EmojiPickerProps {
-  emoji?: string;
-  setEmoji: Dispatch<SetStateAction<string | null>>; // TODO: use onEmojiChange instead
+  emoji?: string | null;
+  onEmojiChange: Dispatch<SetStateAction<string | null>>;
   color?: string;
   name?: string;
   type?: "task" | "category";
 }
 
-export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiPickerProps) => {
+export const CustomEmojiPicker = ({ emoji, onEmojiChange, color, name, type }: EmojiPickerProps) => {
   const { user, setUser } = useContext(UserContext);
   const { emojisStyle, settings } = user;
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
@@ -85,8 +85,8 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
 
   // When the currentEmoji state changes, update the parent component's emoji state
   useEffect(() => {
-    setEmoji(currentEmoji);
-  }, [currentEmoji, setEmoji]);
+    onEmojiChange(currentEmoji);
+  }, [currentEmoji, onEmojiChange]);
 
   // When the emoji prop changes to an empty string, set the currentEmoji state to undefined
   useEffect(() => {
@@ -128,7 +128,6 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
   // ‼ This feature works only in Chrome (Dev / Canary) version 127 or higher with some flags enabled and Gemini Nano model installed
   // https://developer.chrome.com/docs/ai/built-in
   async function useAI(): Promise<void> {
-    const start = new Date().getTime();
     setIsAILoading(true);
     try {
       const sessionInstance: LanguageModel = session || (await LanguageModel.create());
@@ -138,8 +137,6 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
         `Respond with ONLY ONE emoji that best represents this task: "${name}". DO NOT include any other text, explanations, or symbols. Just the SINGLE emoji.`,
       );
 
-      console.log("Full AI response:", response);
-
       // this doesn't split emojis into separate characters
       const emojiRegex =
         /\p{RI}\p{RI}|\p{Emoji}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})?(\u{200D}\p{Emoji}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})?)+|\p{EPres}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})?|\p{Emoji}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})/gu;
@@ -148,7 +145,6 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
 
       // Remove duplicates
       const uniqueEmojis = [...new Set(extractedEmojis)];
-      console.log("Unique Emojis:", uniqueEmojis);
 
       if (uniqueEmojis.length === 0) {
         setCurrentEmoji(null);
@@ -160,7 +156,6 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
             type: "error",
           },
         );
-        console.error("No emoji found.");
         return;
       }
 
@@ -181,11 +176,9 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
 
       if (emojiResponse in emojiMap) {
         emojiResponse = emojiMap[emojiResponse];
-        console.log("Emoji replaced with:", emojiResponse);
       }
 
       const unified = emojiToUnified(emojiResponse.replaceAll(":", ""));
-      console.log("Emoji unified:", unified);
 
       if (emojiRegex.test(emojiResponse)) {
         setIsAILoading(false);
@@ -200,7 +193,6 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
             type: "error",
           },
         );
-        console.error("Invalid emoji.", unified);
       }
     } catch (error) {
       setIsAILoading(false);
@@ -216,11 +208,6 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
       );
     } finally {
       setIsAILoading(false);
-      const end = new Date().getTime();
-      console.log(
-        `%cTook ${end - start}ms to generate.`,
-        `color: ${end - start > 1500 ? "orange" : "lime"}`,
-      );
     }
   }
 

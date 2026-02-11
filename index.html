@@ -439,7 +439,64 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #171d34; /* Dark theme background */
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+          "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+      }
+
+      /* Preloader Styles */
+      .app-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #171d34;
+        z-index: 9999;
+        transition: opacity 0.5s ease-out;
+      }
+
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid rgba(255, 255, 255, 0.1);
+        border-left-color: #764abc; /* Primary color */
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+      }
+
+      .loading-text {
+        color: #ffffff;
+        font-size: 1.2rem;
+        font-weight: 500;
+        letter-spacing: 1px;
+        opacity: 0.8;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+    <div id="root">
+      <div class="app-loader">
+        <div class="spinner"></div>
+        <div class="loading-text">Todo App</div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

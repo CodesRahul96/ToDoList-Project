@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import { ToastIconWrapper } from "../styles";
 import { ColorPalette } from "../theme/themeConfig";
 
-//FIXME: hmr
+
 
 type CustomToastType = "warning" | "info";
 type ExtendedToastType = CustomToastType | ToastType;
@@ -111,7 +111,6 @@ export const showToast = (
     }
     const alreadyVisible = visibleToasts.some((t) => t.id === toastOptions.id && t.visible);
     if (alreadyVisible) {
-      //TODO: reset toast duration
       const elem = document.getElementById(toastOptions.id);
       if (elem) {
         applyBounce(elem);

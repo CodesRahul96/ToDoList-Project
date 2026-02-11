@@ -1,4 +1,5 @@
 import { useTheme } from "@emotion/react";
+import { useSearchParams } from "react-router-dom";
 import {
   CancelRounded,
   Close,
@@ -123,6 +124,10 @@ export const TasksList: React.FC = () => {
   const theme = useTheme();
   const { toasts } = useToasterStore();
 
+  const [searchParams] = useSearchParams();
+  const filterParam = searchParams.get("filter");
+  const categoryParam = searchParams.get("cat");
+
   const listFormat = useMemo(
     () =>
       new Intl.ListFormat("en-US", {
@@ -149,10 +154,6 @@ export const TasksList: React.FC = () => {
       top: event.clientY,
       left: event.clientX,
     });
-
-    // if (!isMobile && !expandedTasks.includes(taskId)) {
-    //   toggleShowMore(taskId);
-    // }
   };
 
   // focus search input on ctrl + /
@@ -170,14 +171,31 @@ export const TasksList: React.FC = () => {
 
   const reorderTasks = useCallback(
     (tasks: Task[]): Task[] => {
+      let filteredTasks = tasks;
+
+      // URL Filter Logic
+      if (filterParam === "today") {
+        const today = new Date().setHours(0, 0, 0, 0);
+        filteredTasks = filteredTasks.filter((task) => {
+          if (task.deadline) {
+            const d = new Date(task.deadline).setHours(0, 0, 0, 0);
+            return d === today && !task.done;
+          }
+          return false;
+        });
+      } else if (filterParam === "important") {
+        filteredTasks = filteredTasks.filter((task) => task.pinned && !task.done);
+      }
+
       // Separate tasks into pinned and unpinned
-      let pinnedTasks = tasks.filter((task) => task.pinned);
-      let unpinnedTasks = tasks.filter((task) => !task.pinned);
+      let pinnedTasks = filteredTasks.filter((task) => task.pinned);
+      let unpinnedTasks = filteredTasks.filter((task) => !task.pinned);
 
       // Filter tasks based on the selected category
-      if (selectedCatId !== undefined) {
+      const activeCatId = categoryParam || selectedCatId;
+      if (activeCatId !== undefined) {
         const categoryFilter = (task: Task) =>
-          task.category?.some((category) => category.id === selectedCatId) ?? false;
+          task.category?.some((category) => category.id === activeCatId) ?? false;
         unpinnedTasks = unpinnedTasks.filter(categoryFilter);
         pinnedTasks = pinnedTasks.filter(categoryFilter);
       }
@@ -222,15 +240,21 @@ export const TasksList: React.FC = () => {
       pinnedTasks = sortTasks(pinnedTasks);
 
       // Move done tasks to bottom if the setting is enabled
-      if (user.settings?.doneToBottom) {
+      // If filtering by 'today' or 'important', we might want to keep that strict or still allow done
+      // The 'important' filter above explicitly filters !task.done.
+      // 'Today' filter also checks !task.done.
+      // So done tasks won't appear in those views.
+      // For default view, we do this:
+      
+      if (user.settings?.doneToBottom && !filterParam) {
         const doneTasks = unpinnedTasks.filter((task) => task.done);
         const notDoneTasks = unpinnedTasks.filter((task) => !task.done);
         return [...pinnedTasks, ...notDoneTasks, ...doneTasks];
       }
-
+      
       return [...pinnedTasks, ...unpinnedTasks];
     },
-    [search, selectedCatId, user.settings?.doneToBottom, sortOption],
+    [search, selectedCatId, user.settings?.doneToBottom, sortOption, filterParam, categoryParam],
   );
 
   const orderedTasks = useMemo(() => reorderTasks(user.tasks), [user.tasks, reorderTasks]);
@@ -507,7 +531,7 @@ export const TasksList: React.FC = () => {
                 )}
               </span>
             </div>
-            {/* TODO: add more features */}
+
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <Tooltip title="Mark selected as done">
                 <IconButton
@@ -559,7 +583,7 @@ export const TasksList: React.FC = () => {
             </b>
           </div>
         )}
-        {/* FIXME: dry */}
+
         {user.tasks.length !== 0 ? (
           moveMode ? (
             <DndContext

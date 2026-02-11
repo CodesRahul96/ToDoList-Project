@@ -138,11 +138,11 @@ const AddTask = () => {
       <TopBar title="Add New Task" />
       <Container>
         <CustomEmojiPicker
-          emoji={typeof emoji === "string" ? emoji : undefined}
-          setEmoji={setEmoji}
-          color={color}
+          emoji={emoji}
+          onEmojiChange={setEmoji}
           name={name}
           type="task"
+          color={color}
         />
         {/* fix for input colors */}
         <InputThemeProvider>

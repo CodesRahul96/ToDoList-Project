@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { defaultUser } from "../constants/defaultUser";
 import { deleteProfilePictureFromDB, showToast } from "../utils";
+import { useAuth } from "../contexts/AuthContext";
 
 interface LogoutDialogProps {
   open: boolean;
@@ -14,11 +15,21 @@ interface LogoutDialogProps {
 
 export function LogoutDialog({ open, onClose }: LogoutDialogProps) {
   const { setUser } = useContext(UserContext);
+  const { logout, user: firebaseUser } = useAuth();
+
   const handleLogout = async () => {
-    setUser(defaultUser);
-    onClose();
-    await deleteProfilePictureFromDB();
-    showToast("You have been successfully logged out");
+    try {
+      if (firebaseUser) {
+        await logout();
+      }
+      setUser(defaultUser);
+      onClose();
+      await deleteProfilePictureFromDB();
+      showToast("You have been successfully logged out");
+    } catch (error) {
+      console.error("Logout error:", error);
+      showToast("Error during logout", { type: "error" });
+    }
   };
 
   return (

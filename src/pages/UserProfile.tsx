@@ -17,7 +17,11 @@ import { useContext, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import {
   AddAPhotoRounded,
+  CloudDoneRounded,
+  CloudOffRounded,
   Delete,
+  GitHub,
+  Google,
   LinkRounded,
   Logout,
   SaveRounded,
@@ -29,6 +33,7 @@ import { PFP_MAX_SIZE, PROFILE_PICTURE_MAX_LENGTH, USER_NAME_MAX_LENGTH } from "
 import { CustomDialogTitle, LogoutDialog, TopBar } from "../components";
 import { DialogBtn, fadeIn, UserAvatar, VisuallyHiddenInput } from "../styles";
 import { UserContext } from "../contexts/UserContext";
+import { useAuth } from "../contexts/AuthContext";
 import { timeAgo, getFontColor, showToast } from "../utils";
 import {
   initDB,
@@ -45,6 +50,7 @@ import { ColorPalette } from "../theme/themeConfig";
 // TODO: move this to settings dialog
 const UserProfile = () => {
   const { user, setUser } = useContext(UserContext);
+  const { user: firebaseUser, signInWithGoogle, signInWithGithub } = useAuth();
   const { name, profilePicture, createdAt } = user;
   const [userName, setUserName] = useState<string>("");
   const [profilePictureURL, setProfilePictureURL] = useState<string>("");
@@ -303,10 +309,74 @@ const UserProfile = () => {
         >
           Save name
         </SaveBtn>
+
+        <Divider sx={{ width: "100%", my: 1 }} />
+
+        <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+          Account & Sync
+        </Typography>
+
+        {firebaseUser ? (
+          <AccountInfo>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              {firebaseUser.providerData[0]?.providerId === "google.com" ? (
+                <Google color="primary" />
+              ) : firebaseUser.providerData[0]?.providerId === "github.com" ? (
+                <GitHub />
+              ) : (
+                <TodayRounded />
+              )}
+              <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                {firebaseUser.email}
+              </Typography>
+            </div>
+            <SyncStatus authenticated={true}>
+              <CloudDoneRounded fontSize="small" />
+              Cloud Sync Active
+            </SyncStatus>
+          </AccountInfo>
+        ) : (
+          <AccountInfo>
+            <Typography variant="body2" sx={{ opacity: 0.7, mb: 2, textAlign: "center" }}>
+              Sign in to sync your tasks across devices and back them up to the cloud.
+            </Typography>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%" }}>
+              <Button
+                variant="outlined"
+                fullWidth
+                onClick={() => signInWithGoogle()}
+                startIcon={<Google />}
+                sx={{ borderRadius: "12px", textTransform: "none", fontWeight: 600 }}
+              >
+                Sign in with Google
+              </Button>
+              <Button
+                variant="contained"
+                fullWidth
+                onClick={() => signInWithGithub()}
+                startIcon={<GitHub />}
+                sx={{
+                  borderRadius: "12px",
+                  textTransform: "none",
+                  fontWeight: 600,
+                  bgcolor: "#24292e",
+                  "&:hover": { bgcolor: "#2f363d" },
+                }}
+              >
+                Sign in with GitHub
+              </Button>
+            </div>
+            <SyncStatus authenticated={false}>
+              <CloudOffRounded fontSize="small" />
+              Local Storage Only
+            </SyncStatus>
+          </AccountInfo>
+        )}
+
         <Button
           color="error"
           variant="outlined"
-          sx={{ p: "12px 20px", borderRadius: "14px", marginTop: "8px" }}
+          sx={{ p: "12px 20px", borderRadius: "14px", marginTop: "16px", width: "100%" }}
           onClick={() => setOpenLogoutDialog(true)}
         >
           <Logout />
@@ -496,4 +566,25 @@ const BrokenPfpAlert = styled(Alert)`
   padding: 0 8px;
   align-items: center;
   animation: ${fadeIn} 0.5s ease-in;
+`;
+
+const AccountInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+`;
+
+const SyncStatus = styled.div<{ authenticated: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: ${({ authenticated, theme }) => (authenticated ? theme.primary : "#ff5252")};
+  opacity: 0.9;
 `;

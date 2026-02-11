@@ -49,6 +49,9 @@ export const useFirestoreSync = () => {
 
   // Push data to Firestore on change
   useEffect(() => {
+    // We strictly check if it's not initial load to avoid overwriting remote data with local immediately
+    // also we could check if user data actually changed compared to what we last synced? 
+    // For now, debounce covers rapid changes.
     if (authUser && !isInitialLoad.current) {
       debouncedSave(user, authUser.uid);
     }
