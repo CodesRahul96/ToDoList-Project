@@ -71,7 +71,9 @@ const UnstyledAvatar = ({ ...props }: AvatarProps) => (
   <Avatar translate={"no"} slotProps={{ img: { loading: "lazy" } }} {...props} />
 );
 
-export const UserAvatar = styled(UnstyledAvatar)<UserAvatarProps>`
+export const UserAvatar = styled(UnstyledAvatar, {
+  shouldForwardProp: (prop) => prop !== "hasimage",
+})<UserAvatarProps>`
   color: #ffffff;
   background: ${({ hasimage, theme }) =>
     hasimage ? "#ffffff1c" : theme.darkmode ? "#5e5e65" : "#8c919c"} !important;

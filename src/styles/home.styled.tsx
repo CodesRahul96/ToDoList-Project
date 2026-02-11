@@ -29,7 +29,9 @@ export const TasksCountContainer = styled.div`
   }
 `;
 //TODO: design this better for light themes
-export const TasksCount = styled.div<{ glow: boolean }>`
+export const TasksCount = styled("div", {
+  shouldForwardProp: (prop) => prop !== "glow",
+})<{ glow: boolean }>`
   position: relative;
   color: ${({ theme }) => getFontColor(theme.secondary)};
   /* background: #090b2258; */
@@ -75,7 +77,9 @@ export const TaskCompletionText = styled.p`
   font-size: 16px;
 `;
 
-export const ProgressPercentageContainer = styled(Box)<{ glow: boolean }>`
+export const ProgressPercentageContainer = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "glow",
+})<{ glow: boolean }>`
   top: 0;
   left: 0;
   bottom: 0;
@@ -103,14 +107,18 @@ export const ProgressPercentageContainer = styled(Box)<{ glow: boolean }>`
   ${({ theme }) => reduceMotion(theme)}
 `;
 
-export const StyledProgress = styled(CircularProgress)<{ glow: boolean }>`
+export const StyledProgress = styled(CircularProgress, {
+  shouldForwardProp: (prop) => prop !== "glow",
+})<{ glow: boolean }>`
   z-index: 1;
   margin: 2px;
   filter: ${({ glow, theme }) => (glow ? `drop-shadow(0 0 6px ${theme.primary}c8)` : "none")};
   transition: 0.3s filter;
 `;
 
-export const AddButton = styled(Button)<{ animate?: boolean; glow: boolean }>`
+export const AddButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== "animate" && prop !== "glow",
+})<{ animate?: boolean; glow: boolean }>`
   cursor: pointer;
   border: none;
   display: flex;
