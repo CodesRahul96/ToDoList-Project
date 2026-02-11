@@ -8,7 +8,6 @@ import { UserContextProvider } from "./contexts/UserProvider.tsx";
 import { registerSW } from "virtual:pwa-register";
 import { showToast } from "./utils/showToast.tsx";
 import { updatePrompt } from "./utils/updatePrompt.tsx";
-import { CircularProgress } from "@mui/material";
 import toast from "react-hot-toast";
 import { TaskProvider } from "./contexts/TaskProvider.tsx";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
