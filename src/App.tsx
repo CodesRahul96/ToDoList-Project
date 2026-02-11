@@ -18,11 +18,14 @@ import { GlobalQuickSaveHandler } from "./components/GlobalQuickSaveHandler";
 
 import { useFirestoreSync } from "./hooks/useFirestoreSync";
 
+import { useReminders } from "./hooks/useReminders";
+
 function App() {
   const { user, setUser } = useContext(UserContext);
   const systemTheme = useSystemTheme();
   
   useFirestoreSync();
+  useReminders(user.tasks);
 
   // Initialize user properties if they are undefined
   // this allows to add new properties to the user object without error

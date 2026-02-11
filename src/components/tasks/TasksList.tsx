@@ -230,6 +230,22 @@ export const TasksList: React.FC = () => {
               if (a.position != null && b.position == null) return -1;
               return new Date(a.date).getTime() - new Date(b.date).getTime();
             });
+          case "priority":
+             return [...tasks].sort((a, b) => {
+                const getPriorityValue = (p?: string) => {
+                    if (p === "high") return 3;
+                    if (p === "medium") return 2;
+                    if (p === "low") return 1;
+                    return 0;
+                };
+                const priorityA = getPriorityValue(a.priority);
+                const priorityB = getPriorityValue(b.priority);
+                
+                if (priorityA !== priorityB) {
+                    return priorityB - priorityA; // Descending
+                }
+                return new Date(b.date).getTime() - new Date(a.date).getTime();
+             });
 
           default:
             return tasks;

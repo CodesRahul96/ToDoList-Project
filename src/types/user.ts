@@ -34,6 +34,20 @@ export interface User {
   lastSyncedAt?: Date;
 }
 
+export interface TimeBlock {
+  start: Date;
+  end: Date;
+  label?: string;
+}
+
+export interface Subtask {
+  id: UUID;
+  name: string;
+  done: boolean;
+}
+
+export type Priority = "low" | "medium" | "high";
+
 /**
  * Represents a task in the application.
  */
@@ -57,6 +71,9 @@ export interface Task {
    * Optional numeric position for drag-and-drop (for p2p sync)
    */
   position?: number;
+  timeBlocks?: TimeBlock[];
+  subtasks?: Subtask[];
+  priority?: Priority;
 }
 
 /**
@@ -91,5 +108,5 @@ export interface AppSettings {
   reduceMotion: ReduceMotionOption;
 }
 
-export type SortOption = "dateCreated" | "dueDate" | "alphabetical" | "custom";
+export type SortOption = "dateCreated" | "dueDate" | "alphabetical" | "custom" | "priority";
 export type ReduceMotionOption = "system" | "on" | "off";

@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { CategoryBadge, TopBar } from "../components";
 import styled from "@emotion/styled";
+import { useTheme } from "@emotion/react";
 import { GlassCard, PathName } from "../styles";
 import NotFound from "./NotFound";
 import { Clear, Done } from "@mui/icons-material";
@@ -10,9 +11,11 @@ import { UserContext } from "../contexts/UserContext";
 import { getColorName } from "ntc-ts";
 
 const TaskDetails = () => {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const { tasks, emojisStyle } = user;
   const { id } = useParams();
+  const theme = useTheme();
+
   const formattedId = id?.replace(".", "");
   const task = tasks.find((task) => task.id.toString().replace(".", "") === formattedId);
 
@@ -41,10 +44,70 @@ const TaskDetails = () => {
     <>
       <TopBar title="Task Details" />
       <DetailsWrapper>
+        {task.priority && (
+            <PriorityIndicator
+                priority={task.priority}
+            >
+                {task.priority} Priority
+            </PriorityIndicator>
+        )}
         <TaskDetailsCard glow={user.settings.enableGlow}>
           <TaskName>
             Task: <span translate="no">{task.name}</span>
           </TaskName>
+          <div style={{ marginTop: "24px" }}>
+                <h3 style={{ marginBottom: "12px" }}>Subtasks</h3>
+                {task.subtasks && task.subtasks.map((subtask) => (
+                    <div 
+                        key={subtask.id} 
+                        style={{ 
+                            display: "flex", 
+                            alignItems: "center", 
+                            gap: "12px", 
+                            padding: "12px", 
+                            background: theme.darkmode ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.5)", 
+                            borderRadius: "16px",
+                            marginBottom: "8px",
+                            cursor: "pointer",
+                            transition: "all 0.2s"
+                        }}
+                        onClick={() => {
+                            const updatedSubtasks = task.subtasks?.map(s => 
+                                s.id === subtask.id ? { ...s, done: !s.done } : s
+                            );
+                            // Directly update user context to persist change
+                            setUser(prev => ({
+                                ...prev,
+                                tasks: prev.tasks.map(t => t.id === task.id ? { ...t, subtasks: updatedSubtasks } : t)
+                            }));
+                        }}
+                    >
+                        <div style={{
+                            width: "24px",
+                            height: "24px",
+                            borderRadius: "8px",
+                            border: `2px solid ${task.color}`,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            background: subtask.done ? task.color : "transparent"
+                        }}>
+                            {subtask.done && <span style={{ color: "white", fontWeight: "bold" }}>✓</span>}
+                        </div>
+                        <span style={{ 
+                            textDecoration: subtask.done ? "line-through" : "none", 
+                            opacity: subtask.done ? 0.6 : 1,
+                            fontWeight: 500
+                        }}>
+                            {subtask.name}
+                        </span>
+                    </div>
+                ))}
+                {(!task.subtasks || task.subtasks.length === 0) && (
+                    <p style={{ opacity: 0.6, fontStyle: "italic" }}>No subtasks</p>
+                )}
+            </div>
+
           <TaskTable>
             <tbody>
               <TableRow>
@@ -220,4 +283,24 @@ const CategoryContainer = styled.div`
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
+`;
+
+const PriorityIndicator = styled.div<{ priority: string }>`
+    position: absolute;
+    top: 80px;
+    right: 24px;
+    padding: 4px 12px;
+    border-radius: 12px;
+    background: ${({ priority }) => priority === "high" ? "#ff4d4d20" : priority === "medium" ? "#ffaa0020" : "#00cc0020"};
+    color: ${({ priority }) => priority === "high" ? "#ff4d4d" : priority === "medium" ? "#ffaa00" : "#00cc00"};
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 12px;
+    border: 1px solid ${({ priority }) => priority === "high" ? "#ff4d4d" : priority === "medium" ? "#ffaa00" : "#00cc00"};
+    width: fit-content;
+
+    @media (max-width: 600px) {
+        top: 70px;
+        right: 16px;
+    }
 `;

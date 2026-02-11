@@ -29,7 +29,7 @@
     "done": true,
     "pinned": false,
     "name": "Workout",
-    "description": "Go to gym and do a full body workout: https://www.youtube.com/watch?v=rL5FdSd1tQ4&ab_channel=MikeThurston",
+    "description": "Go to gym and do a full body workout",
     "emoji": "1f3cb-fe0f",
     "color": "#5d30ff",
     "date": "2024-02-14T23:26:25.681Z",
@@ -67,6 +67,6 @@
         "color": "#248eff"
       }
     ],
-    "sharedBy": "Maciej"
+    "sharedBy": "CodesRahul96"
   }
 ]

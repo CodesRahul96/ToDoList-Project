@@ -15,6 +15,7 @@ import {
   StarRounded,
   LightModeRounded,
   AccessTimeFilledRounded,
+  CalendarMonthRounded,
 } from "@mui/icons-material";
 import { Divider, MenuItem, Tooltip, keyframes } from "@mui/material";
 import React from "react";
@@ -123,6 +124,12 @@ export const SidebarContent: React.FC<SidebarContentProps> = ({
               </MenuLabel>
             </Tooltip>
           )}
+        </StyledMenuItem>
+      </MenuLink>
+
+      <MenuLink onClick={() => handleLinkClick("/calendar")}>
+        <StyledMenuItem selected={isActive("/calendar")} aria-current={isActive("/calendar") ? "page" : undefined}>
+          <CalendarMonthRounded /> &nbsp; Calendar
         </StyledMenuItem>
       </MenuLink>
 

@@ -168,6 +168,32 @@ export const TaskItem = memo(
               <PushPinRounded fontSize="small" /> &nbsp; Pinned
             </Pinned>
           )}
+          {task.priority && (
+            <div style={{
+                display: "flex",
+                alignItems: "center",
+                background: task.priority === "high" ? "#ff4d4d20" : task.priority === "medium" ? "#ffaa0020" : "#00cc0020",
+                color: task.priority === "high" ? "#ff4d4d" : task.priority === "medium" ? "#ffaa00" : "#00cc00",
+                padding: "2px 8px",
+                borderRadius: "8px",
+                fontSize: "12px",
+                fontWeight: "bold",
+                textTransform: "uppercase",
+                width: "fit-content",
+                marginBottom: "4px",
+                border: `1px solid ${task.priority === "high" ? "#ff4d4d" : task.priority === "medium" ? "#ffaa00" : "#00cc00"}`
+            }}>
+                {task.priority}
+            </div>
+          )}
+          {task.subtasks && task.subtasks.length > 0 && (
+             <div style={{ fontSize: "12px", opacity: 0.8, marginBottom: "4px", display: "flex", gap: "4px", alignItems: "center" }}>
+                 <span style={{ fontWeight: "bold" }}>
+                    {task.subtasks.filter(t => t.done).length}/{task.subtasks.length}
+                 </span>
+                 <span>Subtasks</span>
+             </div>
+          )}
           <TaskHeader>
             <TaskName done={task.done} id={`task-name-${task.id}`}>
               {textHighlighter(task.name)}

@@ -36,6 +36,11 @@ const sortOptions: {
     label: "Custom",
     icon: <MoveUpRounded fontSize="small" />,
   },
+  {
+    value: "priority",
+    label: "Priority",
+    icon: <SortByAlphaRounded fontSize="small" />, // Using SortByAlpha temporarily, maybe reuse or find better icon?
+  },
 ];
 
 export const TaskSort = () => {

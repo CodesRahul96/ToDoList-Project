@@ -12,6 +12,7 @@ const Transfer = lazy(() => import("./pages/Transfer"));
 const Categories = lazy(() => import("./pages/Categories"));
 const Purge = lazy(() => import("./pages/Purge"));
 const Sync = lazy(() => import("./pages/Sync"));
+const Calendar = lazy(() => import("./pages/CalendarView"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const AppRouter = (): ReactElement => {
@@ -28,6 +29,7 @@ const AppRouter = (): ReactElement => {
         <Route path="/categories" element={<Categories />} />
         <Route path="/purge" element={<Purge />} />
         <Route path="/sync" element={<Sync />} />
+        <Route path="/calendar" element={<Calendar />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
