@@ -16,9 +16,13 @@ import { GlobalQuickSaveHandler } from "./components/GlobalQuickSaveHandler";
 import type { Category, UUID } from "./types/user";
 import { isDarkMode } from "./utils/colorUtils";
 
+import { useFirestoreSync } from "./hooks/useFirestoreSync";
+
 function App() {
   const { user, setUser } = useContext(UserContext);
   const systemTheme = useSystemTheme();
+  
+  useFirestoreSync();
 
   // Initialize user properties if they are undefined
   // this allows to add new properties to the user object without error
