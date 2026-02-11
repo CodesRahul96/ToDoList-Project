@@ -1,5 +1,6 @@
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
+import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { initColors } from "ntc-ts";
 import { ORIGINAL_COLORS } from "ntc-ts";
@@ -10,6 +11,7 @@ import { updatePrompt } from "./utils/updatePrompt.tsx";
 import { CircularProgress } from "@mui/material";
 import toast from "react-hot-toast";
 import { TaskProvider } from "./contexts/TaskProvider.tsx";
+import { AuthProvider } from "./contexts/AuthContext.tsx";
 
 // initialize ntc colors
 initColors(ORIGINAL_COLORS);
@@ -59,10 +61,12 @@ navigator.serviceWorker?.addEventListener("controllerchange", () => {
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <BrowserRouter>
-    <UserContextProvider>
-      <TaskProvider>
-        <App />
-      </TaskProvider>
-    </UserContextProvider>
+    <AuthProvider>
+      <UserContextProvider>
+        <TaskProvider>
+          <App />
+        </TaskProvider>
+      </UserContextProvider>
+    </AuthProvider>
   </BrowserRouter>,
 );

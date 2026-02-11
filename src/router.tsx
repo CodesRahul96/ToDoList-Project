@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { Loading } from "./components";
 
 const Home = lazy(() => import("./pages/Home"));
+const Login = lazy(() => import("./pages/Login"));
 const TaskDetails = lazy(() => import("./pages/TaskDetails"));
 const SharePage = lazy(() => import("./pages/Share"));
 const AddTask = lazy(() => import("./pages/AddTask"));
@@ -18,6 +19,7 @@ const AppRouter = (): ReactElement => {
     <Suspense fallback={<Loading />}>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/task/:id" element={<TaskDetails />} />
         <Route path="/share" element={<SharePage />} />
         <Route path="/add" element={<AddTask />} />
